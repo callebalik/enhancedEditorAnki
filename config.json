@@ -2,6 +2,6 @@
     "shortcut to open default dialog": "Ctrl+Shift+0",
     "font": "Arial",
     "fontSize": "12",
-    "TinyMCE6-toolbar1": "undo redo fontfamily blocks alignleft aligncenter alignright alignjustify link unlink charmap cleanup nextCloze sameCloze code codesample",
+    "TinyMCE6-toolbar1": "undo redo fontfamily blocks alignleft aligncenter alignright alignjustify link unlink charmap cleanup nextCloze sameCloze clozeNumber code codesample",
     "TinyMCE6-toolbar2": "strikethrough superscript subscript forecolor backcolor removeformat hr blockquote numlist bullist anchor outdent indent table ltr rtl"
 }
