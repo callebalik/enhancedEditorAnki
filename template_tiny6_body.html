@@ -292,6 +292,21 @@
                 saving = false;
             }
         });
+
+        editor.addCommand('removeClozeHighlighting', function () {
+            console.log("removeClozeHighlighting");
+            let content = editor.getContent({ format: "html" });
+            content = removeClozeHighlighting(content);
+        });
+
+        editor.addShortcut('ctrl+shift+r', 'Remove cloze highlighting', 'removeClozeHighlighting');
+        editor.ui.registry.addButton("removeClozeHighlighting", {
+            text: "RCH",
+            tooltip: "removeClozeHighlighting" + "(" + "ctrl+shift+r" + ")",
+            onAction: () => {
+                editor.execCommand("removeClozeHighlighting");
+            },
+        });
     }
 });
 </script>
