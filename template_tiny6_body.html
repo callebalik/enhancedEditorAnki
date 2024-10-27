@@ -1,6 +1,8 @@
 <script src="https://unpkg.com/prettier@2.3.2/standalone.js"></script>
 <script src="https://unpkg.com/prettier@2.3.2/parser-html.js"></script>
 <script src="https://unpkg.com/prettier@2.3.2/parser-babylon.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" />
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <script src="web/jquery-3.5.1.min.js"></script> <!-- load local -->
 <script src="web/listReorder.js"></script> <!-- Load the external reordering script -->
@@ -37,9 +39,15 @@
             ],
 
             text_patterns: [
-                { start: '*', end: '*', format: 'italic' },
+               // Formats
+               { start: '*', end: '*', format: 'italic' },
                 { start: '**', end: '**', format: 'bold' },
-                { start: '~', end: '~', cmd: 'createLink', value: 'https://tiny.cloud' },
+                { start: '~', end: '~', format: 'strikethrough' },
+                { start: '`', end: '`', format: 'code' },
+                { start: '```', end: '```', format: 'pre' },
+                { start: '==', end: '==', format: 'mark' },
+                { start: '_', end: '_', format: 'subscript' },
+                { start: '^', end: '^', format: 'superscript' },
                 { start: '#', format: 'h1' },
                 { start: '##', format: 'h2' },
                 { start: '###', format: 'h3' },
@@ -145,7 +153,8 @@
                 { start: '/square', replacement: '□' },
                 { start: '/diamond', replacement: '◇'},
                 // Medical
-                { start: '/ddx', replacement: 'Differentialdiagnoser' }{ start: '/d!', replacement: '¡' },
+                { start: '/ddx', replacement: 'Differentialdiagnoser' },
+                { start: '/d!', replacement: '¡' },
                 { start: '/d?', replacement: '¿' },
                 { start: '/deg', replacement: '°' },
                 { start: '/mu', replacement: 'μ' },
@@ -159,68 +168,70 @@
                 { start: '/zeta', replacement: 'ζ' },
                 { start: '/eta', replacement: 'η' },
                 { start: '/theta', replacement: 'θ' },
-                { start: '\iota', replacement: 'ι' },
-                { start: '\kappa', replacement: 'κ' },
-                { start: '\lambda', replacement: 'λ' },
-                { start: '\mu', replacement: 'μ' },
-                { start: '\nu', replacement: 'ν' },
-                { start: '\xi', replacement: 'ξ' },
-                { start: '\omicron', replacement: 'ο' },
-                { start: '\pi', replacement: 'π' },
-                { start: '\rho', replacement: 'ρ' },
-                { start: '\sigma', replacement: 'σ' },
-                { start: '\tau', replacement: 'τ' },
-                { start: '\upsilon', replacement: 'υ' },
-                { start: '\phi', replacement: 'φ' },
-                { start: '\chi', replacement: 'χ' },
-                { start: '\psi', replacement: 'ψ' },
-                { start: '\omega', replacement: 'ω' },
-                { start: '\Gamma', replacement: 'Γ' },
-                { start: '\Delta', replacement: 'Δ' },
-                { start: '\Theta', replacement: 'Θ' },
-                { start: '\Lambda', replacement: 'Λ' },
-                { start: '\Xi', replacement: 'Ξ' },
-                { start: '\Pi', replacement: 'Π' },
-                { start: '\Sigma', replacement: 'Σ' },
-                { start: '\Upsilon', replacement: 'Υ' },
-                { start: '\Phi', replacement: 'Φ' },
-                { start: '\Psi', replacement: 'Ψ' },
-                { start: '\Omega', replacement: 'Ω' },
-                { start: '\int', replacement: '∫' },
-                { start: '\sum', replacement: '∑' },
-                { start: '\prod', replacement: '∏' },
-                { start: '\lim', replacement: 'lim' },
-                { start: '\in', replacement: '∈' },
-                { start: '\notin', replacement: '∉' },
-                { start: '\subset', replacement: '⊂' },
-                { start: '\subseteq', replacement: '⊆' },
-                { start: '\supset', replacement: '⊃' },
-                { start: '\supseteq', replacement: '⊇' },
-                { start: '\cup', replacement: '∪' },
-                { start: '\cap', replacement: '∩' },
-                { start: '\emptyset', replacement: '∅' },
-                { start: '\nabla', replacement: '∇' },
-                { start: '\partial', replacement: '∂' },
-                { start: '\forall', replacement: '∀' },
-                { start: '\exists', replacement: '∃' },
-                { start: '\neg', replacement: '¬' },
-                { start: '\wedge', replacement: '∧' },
-                { start: '\vee', replacement: '∨' },
-                { start: '\rightarrow', replacement: '→' },
-                { start: '\leftarrow', replacement: '←' },
-                { start: '\Rightarrow', replacement: '⇒' },
-                { start: '\Leftarrow', replacement: '⇐' },
-                { start: '\leftrightarrow', replacement: '↔' },
-                { start: '\Leftrightarrow', replacement: '⇔' },
-                { start: '\vdash', replacement: '⊢' },
-                { start: '\models', replacement: '⊨' },
-                { start: '\perp', replacement: '⊥' },
-                { start: '\angle', replacement: '∠' },
-                { start: '\triangle', replacement: '△' },
-                { start: '\square', replacement: '□' },
-                { start: '\diamond', replacement: '◇'},
+                { start: '/iota', replacement: 'ι' },
+                { start: '/kappa', replacement: 'κ' },
+                { start: '/lambda', replacement: 'λ' },
+                { start: '/mu', replacement: 'μ' },
+                { start: '/nu', replacement: 'ν' },
+                { start: '/xi', replacement: 'ξ' },
+                { start: '/omicron', replacement: 'ο' },
+                { start: '/pi', replacement: 'π' },
+                { start: '/rho', replacement: 'ρ' },
+                { start: '/sigma', replacement: 'σ' },
+                { start: '/tau', replacement: 'τ' },
+                { start: '/upsilon', replacement: 'υ' },
+                { start: '/phi', replacement: 'φ' },
+                { start: '/chi', replacement: 'χ' },
+                { start: '/psi', replacement: 'ψ' },
+                { start: '/omega', replacement: 'ω' },
+                { start: '/Gamma', replacement: 'Γ' },
+                { start: '/Delta', replacement: 'Δ' },
+                { start: '/Theta', replacement: 'Θ' },
+                { start: '/Lambda', replacement: 'Λ' },
+                { start: '/Xi', replacement: 'Ξ' },
+                { start: '/Pi', replacement: 'Π' },
+                { start: '/Sigma', replacement: 'Σ' },
+                { start: '/Upsilon', replacement: 'Υ' },
+                { start: '/Phi', replacement: 'Φ' },
+                { start: '/Psi', replacement: 'Ψ' },
+                { start: '/Omega', replacement: 'Ω' },
+                { start: '/int', replacement: '∫' },
+                { start: '/sum', replacement: '∑' },
+                { start: '/prod', replacement: '∏' },
+                { start: '/lim', replacement: 'lim' },
+                { start: '/in', replacement: '∈' },
+                { start: '/notin', replacement: '∉' },
+                { start: '/subset', replacement: '⊂' },
+                { start: '/subseteq', replacement: '⊆' },
+                { start: '/supset', replacement: '⊃' },
+                { start: '/supseteq', replacement: '⊇' },
+                { start: '/cup', replacement: '∪' },
+                { start: '/cap', replacement: '∩' },
+                { start: '/emptyset', replacement: '∅' },
+                { start: '/nabla', replacement: '∇' },
+                { start: '/partial', replacement: '∂' },
+                { start: '/forall', replacement: '∀' },
+                { start: '/exists', replacement: '∃' },
+                { start: '/neg', replacement: '¬' },
+                { start: '/wedge', replacement: '∧' },
+                { start: '/vee', replacement: '∨' },
+                { start: '/rightarrow', replacement: '→' },
+                { start: '/leftarrow', replacement: '←' },
+                { start: '/Rightarrow', replacement: '⇒' },
+                { start: '/Leftarrow', replacement: '⇐' },
+                { start: '/leftrightarrow', replacement: '↔' },
+                { start: '/Leftrightarrow', replacement: '⇔' },
+                { start: '/vdash', replacement: '⊢' },
+                { start: '/models', replacement: '⊨' },
+                { start: '/perp', replacement: '⊥' },
+                { start: '/angle', replacement: '∠' },
+                { start: '/triangle', replacement: '△' },
+                { start: '/square', replacement: '□' },
+                { start: '/diamond', replacement: '◇'},
                 // Medical
-                { start: '\ddx', replacement: 'Differentialdiagnoser' }
+                { start: '/ddx', replacement: 'Differential Diagnosis' },
+                { start: '/ttx', replacement: 'Treatments'},
+
   ],
 
     toolbar1: '%(TOOLBAR1)s | accordion | removeTableStylesButton fullscreen moveItemUp moveItemDown',  // Add the button to the toolbar
@@ -243,6 +254,23 @@
                 // Add shortcut to toggle source code view
                 editor.addShortcut("Ctrl+Shift+X", "Toggle Source Code", "mceCodeEditor");
 
+
+                editor.on('OpenWindow', function(e) {
+            var dialogTitle = e.target.getEl().querySelector('.tox-dialog__title');
+            if (dialogTitle && dialogTitle.innerText === 'Source Code') {
+                tinymce.activeEditor.windowManager.alert('Hello world!');
+                alert('Source code editing formatting test');
+                var textarea = e.target.getEl().querySelector('textarea.tox-textarea');
+                if (textarea) {
+                    textarea.value = prettier.format(textarea.value, {
+                        parser: 'html',
+                        plugins: prettierPlugins
+                    });
+                }
+            }
+        });
+
+
                 // Custom command to remove specific inline styles from table elements
                 editor.addCommand('removeTableStyles', function () {
                     // Get the current HTML content
@@ -253,12 +281,22 @@
                     const doc = parser.parseFromString(content, 'text/html');
 
                     // Select table-related elements and remove specified inline styles
-                    const elements = doc.querySelectorAll('table, th, td, tr');
-                    elements.forEach(el => {
+                    const tableElm = doc.querySelectorAll('table, th, td, tr, col, colgroup');
+                    const paragraphElm = doc.querySelectorAll('span, div, p');
+
+                    tableElm.forEach(el => {
                         el.style.removeProperty('width');
                         el.style.removeProperty('height');
                         el.style.removeProperty('font-size');
                         el.style.removeProperty('text-align');
+                        el.style.removeProperty('border-collapse');
+                        el.style.removeProperty('border');
+                    });
+
+                    paragraphElm.forEach(el => {
+                        el.style.removeProperty('text-align');
+                        el.style.removeProperty('font-size');
+                        el.style.removeProperty('color');
                     });
 
                     // Set the modified HTML content back into the editor
