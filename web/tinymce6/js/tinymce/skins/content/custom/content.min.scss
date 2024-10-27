@@ -3,25 +3,8 @@
 
 @charset "UTF-8";
 
-h1,
-h2,
-h3,
-h4,
-h5 {
-    background-color: #f69c9c;
-}
-
-
-body::-webkit-scrollbar {
-    display: none;
-}
-
-#tinymce {
-    font-size: 2px;
-}
-
 html {
-    font-size: 12px;
+    font-size: 16px;
 }
 
 img {
@@ -43,7 +26,7 @@ h1 {
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
     margin-top: 0.3rem;
-    font-size: 3rem;
+    font-size: 2.2rem;
     line-height: 3rem;
     overflow-y: hidden;
     scrollbar-width: none;
@@ -159,7 +142,7 @@ li:not(:first-child) {
 table {
     display: table;
     margin: 10px 0px;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     border-collapse: separate;
     border-spacing: 0px;
@@ -201,7 +184,7 @@ table tbody {
 
 table tbody tr {
     border-bottom: 1px solid #afafaf;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 table tbody tr:nth-of-type(even) {
