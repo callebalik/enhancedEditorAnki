@@ -12,6 +12,8 @@
 <script src="_addons/805891399/web/sourceCode.js"></script>
 <script>
         var myfontsize = "%(FONTSIZE)s";
+            // Define a global flag for save state
+        let saving = false;
 
         tinymce.init({
     skin: "%(SKIN)s",
@@ -259,6 +261,7 @@
             %(CUSTOMBGCOLOR)s
             editor.execCommand('mceFullScreen');
             editor.execCommand('mceVisualBlocks');
+            applyClozeHighlighting(editor);
         });
 
         // Load external scripts
