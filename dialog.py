@@ -2,17 +2,16 @@ from aqt import mw
 from aqt.qt import (
     QDialog,
     QDialogButtonBox,
+    QHBoxLayout,
     QKeySequence,
     QMetaObject,
+    QPushButton,
     QShortcut,
     Qt,
-    QVBoxLayout
+    QVBoxLayout,
 )
-from aqt.utils import (
-     askUser,
-     saveGeom,
-     restoreGeom,
-)
+from aqt.utils import askUser, restoreGeom, saveGeom
+
 from .anki_version_detection import anki_point_version
 from .helpers import post_process_html
 from .my_webview import MyWebView
@@ -47,6 +46,7 @@ class ExtraWysiwygEditorForField(QDialog):
         self.parent = editor.parentWindow
         self.setWindowTitle(wintitle)
         self.resize(810, 700)
+        # Restore the window size and position
         restoreGeom(self, "805891399_winsize")
 
         main_layout = QVBoxLayout()
@@ -66,6 +66,17 @@ class ExtraWysiwygEditorForField(QDialog):
             | QDialogButtonBox.StandardButton.Save
         )
         main_layout.addWidget(self.buttonBox)
+
+        # Add a maximize button
+        maximize_button = QPushButton("Maximize")
+        maximize_button.clicked.connect(self.maximize_window)
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(maximize_button)
+        main_layout.addLayout(button_layout)
+
+        # Add a shortcut for maximizing the window
+        maximize_shortcut = QShortcut(QKeySequence("Win+F11"), self)
+        maximize_shortcut.activated.connect(self.maximize_window)
 
         self.buttonBox.accepted.connect(self.onAccept)
         self.buttonBox.rejected.connect(self.onReject)
@@ -113,3 +124,6 @@ class ExtraWysiwygEditorForField(QDialog):
             event.accept()
         else:
             event.ignore()
+
+    def maximize_window(self):
+        self.showMaximized()
