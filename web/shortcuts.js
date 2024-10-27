@@ -9,8 +9,8 @@ function defineShortcuts(editor) {
     editor.addShortcut('Ctrl+M', 'indent', 'Indent');
     editor.addShortcut('Ctrl+Alt+M', 'outdent', 'Outdent');
 
-    editor.addShortcut("F7", "nextCloze", "nextCloze");  // nextCloze defined above
-    editor.addShortcut("F8", "addCloze", "sameCloze");  // sameCloze defined above
+    // editor.addShortcut("F7", "nextCloze", "nextCloze");  // nextCloze defined above
+    // editor.addShortcut("F8", "addCloze", "sameCloze");  // sameCloze defined above
     editor.addShortcut("F9", "InsertUnorderedList", "InsertUnorderedList");
     editor.addShortcut("F10", "InsertOrderedList", "InsertOrderedList");
     editor.addShortcut("F11", "Subscript", "Subscript");
@@ -28,8 +28,11 @@ function defineShortcuts(editor) {
     editor.addShortcut("Alt+40", "Insert ↓ (Alt+ArrowDown)", function () {editor.execCommand("mceInsertContent", 0, "↓");});
     editor.addShortcut("Shift+Alt+40", "Insert ⇓ (Shift+Alt+ArrowDown)", function () {editor.execCommand("mceInsertContent", 0, "⇓");});
     editor.addShortcut("Alt+A", "Insert α (Alt+A)", function () {editor.execCommand("mceInsertContent", 0, "α");});
+    editor.addShortcut("Alt+Shift+A", "Insert Α (Alt+Shift+A)", function () {editor.execCommand("mceInsertContent", 0, "Α");});
     editor.addShortcut("Alt+B", "Insert β (Alt+B)", function () {editor.execCommand("mceInsertContent", 0, "β");});
+    editor.addShortcut("Alt+Shift+B", "Insert β (Alt+Shift+B)", function () {editor.execCommand("mceInsertContent", 0, "β");});
     editor.addShortcut("Alt+G", "Insert γ (Alt+G)", function () {editor.execCommand("mceInsertContent", 0, "γ");});
+
     editor.addShortcut("Alt+D", "Insert δ (Alt+D)", function () {editor.execCommand("mceInsertContent", 0, "δ");});
     editor.addShortcut("Alt+E", "Insert ε (Alt+E)", function () {editor.execCommand("mceInsertContent", 0, "ε");});
     editor.addShortcut("Ctrl+Alt+39", "Insert ∴ (therefore) (Ctrl+Alt+ArrowRight)", function () {editor.execCommand("mceInsertContent", 0, "∴");});
