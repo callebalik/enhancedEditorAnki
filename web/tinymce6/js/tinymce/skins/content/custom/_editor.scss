@@ -1,38 +1,56 @@
-.mce-content-body,
-body,
+// html.night-mode {
+//     background-color: #000;
+// }
+
 body#tinymce {
-    width: 100vw;
-    padding: 1rem;
+    width: 98vw;
+    padding: 0;
+    // margin: 1vh;
+
+    div, p, ul, ol {
+        font-size: 1rem;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        background-color: #c6f1fc;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+    }
+
+    table {
+        table-layout: fixed;
+        width: 100%;
+        overflow-wrap: break-word;
+        width: 100% !important;
+        max-width: 98vw !important;
+        background-color: #f3adad;
+
+        tbody {
+            max-width: 98vw !important;
+        }
+
+        td, th {
+            white-space: normal;       /* Allows line breaks */
+            overflow-wrap: break-word;  /* Break long words */
+            word-break: break-word;     /* Force line break within words if needed */
+        }
+    }
+
+    img {
+        max-height: 20vh;
+        width: auto;
+    }
+
+
+
 }
 
-html {
-    font-size: 12px;
-}
-
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-    background-color: #f3adad;
-}
-
-table {
-    width: 100% !important;
-    max-width: 100% !important;
-    background-color: #f3adad;
-}
-
-
-div {
-    border: 1px dotted black;
-}
-
-
-
-
-img {
-    max-height: 20vh;
-    width: auto;
+body::-webkit-scrollbar {
+    display: none;
 }
