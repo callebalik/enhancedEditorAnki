@@ -39,3 +39,33 @@ function cleanInlineStyles(editor) {
     onAction: () => editor.execCommand("removeTableStyles"),
   });
 }
+
+function unwrapParentElement(editor) {
+  editor.addCommand("unwrapParent", function () {
+    // Get the current selected node
+    const selectedNode = editor.selection.getNode();
+
+    // Get the parent element to unwrap (if applicable)
+    const parent = selectedNode.parentNode;
+
+    // Ensure the parent exists and is not the body (to avoid unwrapping too high up)
+    if (parent && parent.nodeName !== "BODY") {
+      // Move each child node of the parent before the parent itself
+      while (parent.firstChild) {
+        parent.parentNode.insertBefore(parent.firstChild, parent);
+      }
+
+      // Remove the now-empty parent element
+      parent.remove();
+    }
+  });
+  editor.addShortcut("ctrl+shift+alt+u", "unwrapParent", "unwrapParent");
+  // Optional: Add a toolbar button to unwrap
+  editor.ui.registry.addButton("unwrapParentButton", {
+    text: "Unwrap Element",
+    tooltip: "Unwrap parent element of the current selection",
+    onAction: function () {
+      editor.execCommand("unwrapParent");
+    },
+  });
+}
