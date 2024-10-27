@@ -261,6 +261,20 @@
         clozesMain(editor);
         shortcutsMain(editor);
 
+        editor.on('dblclick', function (e) {
+            const selection = editor.selection;
+            const rng = selection.getRng();
+
+            // Check if selection includes trailing whitespace
+            const selectedText = selection.getContent({ format: 'text' });
+            if (/\s$/.test(selectedText)) {
+                // Adjust the range to exclude trailing whitespace
+                rng.setEnd(rng.endContainer, rng.endOffset - 1);
+                selection.setRng(rng);
+            }
+        });
+
+
     }
 });
 </script>
