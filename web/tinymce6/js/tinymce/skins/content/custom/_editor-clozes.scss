@@ -1,0 +1,20 @@
+.cloze-highlight {
+    font-size: 0.9em;
+    background-color: rgba(255, 255, 0, 0.655);
+    border: 1px solid #000;
+    border-radius: 3px;
+    padding: 0 1px;
+    margin: 0 1px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.cloze-brackets {
+    font-family: monospace;
+    font-size: 0.7em;
+    background-color: mediumseagreen;
+    font-weight: bold;
+    letter-spacing: 0em;
+    border: 1px solid #000;
+    border-radius: 2px;
+}

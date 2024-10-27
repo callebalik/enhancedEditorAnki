@@ -5,6 +5,7 @@ function clozesMain(editor) {
     let content = editor.getContent();
     let return_text = newClozeText(content, selected_text, false);
     editor.execCommand("mceInsertContent", 0, return_text);
+    applyClozeHighlighting(editor);
   });
   editor.addShortcut("ctrl+shift+c", "nextCloze", "nextCloze");
   editor.ui.registry.addButton("nextCloze", {
@@ -21,6 +22,7 @@ function clozesMain(editor) {
     let content = editor.getContent();
     let return_text = newClozeText(content, selected_text, true);
     editor.execCommand("mceInsertContent", 0, return_text);
+    applyClozeHighlighting(editor);
   });
   editor.addShortcut("ctrl+alt+shift+c", "addCloze", "sameCloze");
   editor.ui.registry.addButton("sameCloze", {
@@ -35,15 +37,16 @@ function clozesMain(editor) {
     let selected_text = editor.selection.getContent({ format: "html" });
     let return_text = newClozeTextNumber(selected_text);
     editor.execCommand("mceInsertContent", 0, return_text);
+    applyClozeHighlighting(editor);
   });
-    editor.addShortcut("ctrl+shift+n", "clozeNumber", "clozeNumber");
-    editor.ui.registry.addButton("clozeNumber", {
-      text: "Cln#",
-      tooltip: "clozeNumber" + "(" + "ctrl+shift+n" + ")",
-      onAction: () => {
-        editor.execCommand("clozeNumber");
-      },
-    });
+  editor.addShortcut("ctrl+shift+n", "clozeNumber", "clozeNumber");
+  editor.ui.registry.addButton("clozeNumber", {
+    text: "Cln#",
+    tooltip: "clozeNumber" + "(" + "ctrl+shift+n" + ")",
+    onAction: () => {
+      editor.execCommand("clozeNumber");
+    },
+  });
 }
 
 function newClozeText(content, selected_text, same) {
@@ -93,4 +96,65 @@ function newClozeTextNumber(selected_text) {
   }
   var text = "{{c" + newClozeIndex + "::" + selected_text + "}}";
   return text;
+}
+
+// Function to apply cloze highlighting
+function closeEditor(editor) {
+    let content = editor.getContent({ format: "html" });
+    content = removeClozeHighlighting(content);
+    editor.setContent(content, { format: "html" });
+}
+
+function applyClozeHighlighting(editor) {
+    console.log("Applying cloze highlighting");
+    let content = editor.getContent({ format: "html" });
+    content = removeClozeHighlighting(content);
+    content = addClozeHighlighting(content);
+    editor.setContent(content, { format: "html" });
+}
+
+  function removeClozeHighlighting(content) {
+    // Step 2: Parse the content into a DOM document
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, "text/html");
+
+    // Step 3: Remove existing cloze highlighting
+    // Remove all <span class="cloze-brackets"> elements
+    const bracketsSpans = doc.querySelectorAll('span.cloze-brackets');
+    console.log(bracketsSpans);
+    bracketsSpans.forEach((span) => {
+      // Replace the span with its child nodes (unwrap)
+      const parent = span.parentNode;
+      while (span.firstChild) {
+        parent.insertBefore(span.firstChild, span);
+      }
+      parent.removeChild(span);
+    });
+
+    // Remove all <span class="cloze-highlight"> elements
+    const highlightSpans = doc.querySelectorAll('span.cloze-highlight');
+    highlightSpans.forEach((span) => {
+      // Replace the span with its child nodes (unwrap)
+      const parent = span.parentNode;
+      while (span.firstChild) {
+        parent.insertBefore(span.firstChild, span);
+      }
+      parent.removeChild(span);
+    });
+
+    // Step 4: Serialize the modified DOM back to HTML
+    const newContent = doc.body.innerHTML;
+
+    return newContent;
+}
+
+function addClozeHighlighting(content) {
+    content = content.replace(/\{\{c(\d+)::(.*?)\}\}/g, (match, p1, p2) => {
+      return `<span class="cloze-brackets">{{c${p1}::</span><span class="cloze-highlight">${p2}</span><span class="cloze-brackets">}}</span>`;
+    });
+    return content;
+}
+
+function toggleClozeHighlighting(editor) {
+    $
 }

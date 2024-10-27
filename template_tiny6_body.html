@@ -280,7 +280,15 @@
             }
         });
 
-
+        // On editor close
+        editor.on('getContent', function (e) {
+            if (saving) {
+                console.log("Closing editor")
+                e.content = removeClozeHighlighting(e.content);
+                // Reset the flag to ensure processing occurs only once per save
+                saving = false;
+            }
+        });
     }
 });
 </script>

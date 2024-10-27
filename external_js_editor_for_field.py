@@ -68,7 +68,11 @@ def get_settings(chosen_name):
         tb2 = gc("TinyMCE6-toolbar2", defau2)
         return {
             "js_file": "tinymce6/js/tinymce/tinymce.min.js",
-            "jssavecmd": "tinyMCE.activeEditor.getContent();",
+            "jssavecmd": """
+            console.log("saving ...");  // for debugging
+            saving = true;  // Set flag to indicate saving process
+            tinyMCE.activeEditor.getContent();
+            """,
             "wintitle": "Anki - edit current field in TinyMCE",
             "dialogname": "tinymce6",
             "webpath": f"/_addons/{addonfoldername}/web/",
