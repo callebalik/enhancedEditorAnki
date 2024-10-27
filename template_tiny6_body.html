@@ -1,6 +1,6 @@
 <script src="https://unpkg.com/prettier@2.3.2/standalone.js"></script>
 <script src="https://unpkg.com/prettier@2.3.2/parser-html.js"></script>
-<script src="https://unpkg.com/prettier@2.3.2/parser-babylon.js"></script>
+<!-- <script src="https://unpkg.com/prettier@2.3.2/parser-babylon.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" />
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
@@ -31,6 +31,12 @@
     forced_root_block: 'div',
     extended_valid_elements: 'u,b,i',
     autoresize: false,
+    table_use_colgroups: false,
+//     table_default_styles: {
+//     width: '50vw'
+//   },
+//   table_sizing_mode: 'fixed',
+
     invalid_styles: {
         '*': 'width',
         '*': 'text-align'
