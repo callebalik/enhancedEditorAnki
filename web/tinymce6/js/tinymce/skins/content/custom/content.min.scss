@@ -1,0 +1,280 @@
+@charset "UTF-8";
+@import "editor";
+
+@charset "UTF-8";
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    background-color: #f69c9c;
+}
+
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+#tinymce {
+    font-size: 2px;
+}
+
+html {
+    font-size: 12px;
+}
+
+img {
+    max-height: 20vh;
+    width: auto;
+}
+
+.numeral {
+    font-family: et-book-roman-old-style;
+}
+
+h1 {
+    height: auto;
+    max-height: 9rem;
+    font-weight: 400;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    padding-top: 0.3rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    margin-top: 0.3rem;
+    font-size: 3rem;
+    line-height: 3rem;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+h2 {
+    font-weight: 200;
+    margin-top: 1.1rem;
+    margin-bottom: 0.3rem;
+    font-size: 2.2rem;
+    line-height: 1;
+}
+
+@media only screen and (max-width: 480px) {
+    h2 {
+        font-size: 1.5rem;
+    }
+}
+
+h3 {
+    font-weight: 400;
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    margin-bottom: 1.4rem;
+    line-height: 1;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    width: 55%;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+p.subtitle {
+    font-style: italic;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    display: block;
+    line-height: 1;
+}
+
+.numeral {
+    font-family: et-book-roman-old-style;
+}
+
+.danger {
+    color: red;
+}
+
+article {
+    padding: 1rem 0rem;
+}
+
+@media only screen and (max-width: 480px) {
+    article {
+        padding: 2vh 1vw;
+    }
+}
+
+@media only screen and (480px < width) and (max-width: 1024px) {
+    article {
+        padding: 1rem 0rem;
+    }
+}
+
+p,
+dl,
+ol,
+ul {
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+}
+
+@media only screen and (max-width: 480px) {
+
+    p,
+    dl,
+    ol,
+    ul {
+        font-size: 0.9rem;
+        line-height: 1.5rem;
+    }
+}
+
+ul,
+ol {
+    padding-inline-start: 2rem;
+    padding-right: 0.5rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    background: #f7f7f6;
+    border-top: #111 1px dotted;
+    border-bottom: #111 1px dotted;
+}
+
+
+
+dt:not(:first-child),
+li:not(:first-child) {
+    margin-top: 0.25rem;
+}
+
+.table-container {
+    max-width: 70vw;
+}
+
+table {
+    display: table;
+    margin: 10px 0px;
+    font-size: 0.9rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border-collapse: separate;
+    border-spacing: 0px;
+    white-space: nowrap;
+    border: 1px solid black;
+}
+
+table th,
+table td {
+    padding: 0.2em 1em;
+    border-left: 1px solid black;
+}
+
+table thead tr {
+    color: #ffffff;
+
+}
+
+table thead th {
+    background-color: #009879;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-bottom: 1px dotted #5d5d5d;
+}
+
+table thead th:first-child {
+    position: sticky;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    box-shadow: rgba(0, 0, 0, 0.32) 1px 1px 3px;
+    border-left: none;
+}
+
+table tbody {
+    border-bottom: 2px solid #009879;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #afafaf;
+    font-size: 0.8rem;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+table tbody tr:nth-of-type(even) th {
+    background-color: #f3f3f3;
+    border-bottom: 1px solid #f3f3f3;
+    border-top: 1px solid #f3f3f3;
+}
+
+table tbody tr:nth-of-type(odd) {
+    background-color: #ffffff;
+}
+
+table tbody tr:nth-of-type(odd) th {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ffffff;
+    border-top: 1px solid #ffffff;
+}
+
+table tbody tr:hover th,
+table tbody tr:hover td {
+    color: #009879;
+    border-bottom: 1px solid #009879;
+    border-top: 1px solid #009879;
+}
+
+table tbody tr tr+tr:hover {
+    background-color: red;
+}
+
+table tbody tr th {
+    padding-left: 0.5em;
+    font-weight: normal;
+    text-align: left;
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    border-right: 0px solid #393939;
+    border-left: none;
+    box-shadow: rgba(0, 0, 0, 0.32) 1px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+table caption {
+    text-align: left;
+    padding: 0.25rem;
+    position: sticky;
+    left: 0;
+}
+
+
+/* COLOR ACCENTS FOR BOLD-ITALICS-UNDERLINE*/
+b {
+    color: #9c4243;
+}
+
+/* BOLD STYLE */
+u {
+    color: #999658;
+}
+
+/* UNDERLINE STYLE */
+/* ITALICS STYLE */
+b u {
+    color: #ffdb47;
+}
+
+/* LINK STYLE */
+u i {
+    color: #a55fff;
+}
+
+
+/*# sourceMappingURL=tiny6.css.map */

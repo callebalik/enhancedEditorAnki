@@ -1,0 +1,1097 @@
+@charset "UTF-8";
+body::-webkit-scrollbar {
+  display: none;
+}
+
+img {
+  max-height: none;
+}
+
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  padding-inline-start: 40px;
+}
+
+body {
+  -webkit-font-smoothing: auto;
+  /* Remove the default margin  */
+  margin: 0;
+  /* Tufte CSS styles */
+  margin-left: auto;
+  margin-right: auto;
+  counter-reset: sidenote-counter;
+}
+
+#qa {
+  padding: 0;
+  margin: 0;
+}
+
+.card,
+.card2 {
+  /* Remove the default margin  */
+  margin-left: auto;
+  margin-right: auto;
+  counter-reset: sidenote-counter;
+}
+
+body {
+  -webkit-font-smoothing: auto;
+  /* Remove the default margin  */
+  margin: 0;
+  /* Tufte CSS styles */
+  margin-left: auto;
+  margin-right: auto;
+  counter-reset: sidenote-counter;
+}
+
+#qa {
+  padding: 0;
+  margin: 0;
+}
+
+.card,
+.card2 {
+  /* Remove the default margin  */
+  margin-left: auto;
+  margin-right: auto;
+  counter-reset: sidenote-counter;
+}
+
+/* Import ET Book styles
+   adapted from https://github.com/edwardtufte/et-book/blob/gh-pages/et-book.css */
+@font-face {
+  font-family: "et-book";
+  src: url("_et-book-semi-bold-old-style-figures.ttf"), url("/test_resources/fonts/et-book/et-book-roman-old-style-figures.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "et-book";
+  src: url("_et-book-display-italic-old-style-figures.ttf"), url("/test_resources/fonts/et-book/et-book-display-italic-old-style-figures.ttf");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "et-book";
+  src: url("_et-book-bold-line-figures.ttf"), url("/test_resources/fonts/et-book/et-book-bold-line-figures.ttf");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "et-book-roman-old-style";
+  src: url("_et-book-roman-old-style-figures.ttf"), url("/test_resources/fonts/et-book/et-book-roman-old-style-figures.ttf");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.sans {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.nightMode.card,
+.night_mode .card,
+.nightMode #tags-container,
+.night_mode #tags-container {
+  background-color: #fffff8;
+  color: #111;
+}
+
+body {
+  background-color: #fffff8;
+  color: #111;
+}
+
+/* COLOR ACCENTS FOR BOLD-ITALICS-UNDERLINE*/
+b {
+  color: #9c4243;
+}
+
+/* BOLD STYLE */
+u {
+  color: #999658;
+}
+
+/* UNDERLINE STYLE */
+/* ITALICS STYLE */
+b u {
+  color: #ffdb47;
+}
+
+/* LINK STYLE */
+u i {
+  color: #a55fff;
+}
+
+/* HINT COLOR*/
+/* HINT REVEAL COLOR */
+/* Missed Questions Reveal Color */
+/* NM "EXTRA" FIELD COLOR */
+/* NM HINT COLOR */
+/* NM HINT REVEAL COLOR */
+/* This dosen't work for some reason */
+/* :root,
+  :root.night-mode {
+    --ct-text-size: 20px;
+    --ls-font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+    --ct-code-font-family: "Fira Code", monospace;
+  } */
+html {
+  --ct-text-size: 18px;
+  font-size: var(--ct-text-size);
+  --ls-font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD",
+      "Book Antiqua", Georgia, serif;
+  --ct-code-font-family: "Fira Code", monospace;
+}
+@media only screen and (max-width: 480px) {
+  html {
+    --ct-text-size: 14px;
+  }
+}
+@media only screen and (min-width: 480px) and (max-width: 1024px) {
+  html {
+    --ct-text-size: 16px;
+  }
+}
+
+body.card,
+body.nightMode,
+body.night_mode,
+body.fancy {
+  font-family: var(--ls-font-family);
+  counter-reset: sidenote-counter;
+  margin-top: 10vh;
+}
+@media only screen and (max-width: 480px) {
+  body.card,
+  body.nightMode,
+  body.night_mode,
+  body.fancy {
+    margin-top: 2vh;
+  }
+}
+@media only screen and (min-width: 480px) and (max-width: 1024px) {
+  body.card,
+  body.nightMode,
+  body.night_mode,
+  body.fancy {
+    margin-top: 6vh;
+  }
+}
+
+article {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1400px;
+}
+
+.numeral {
+  font-family: et-book-roman-old-style;
+}
+
+h1 {
+  height: auto;
+  max-height: 9rem;
+  font-weight: 400;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  padding-top: 0.3rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  margin-top: 0.3rem;
+  font-size: 3rem;
+  line-height: 3rem;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  /* Firefox */
+}
+h1 ::-webkit-scrollbar {
+  display: none;
+}
+@media only screen and (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    max-height: 4.5rem;
+    margin-top: 0rem;
+    margin-bottom: 1rem;
+  }
+}
+
+h2 {
+  font-weight: 200;
+  margin-top: 2.1rem;
+  margin-bottom: 1.4rem;
+  font-size: 2.2rem;
+  line-height: 1;
+}
+@media only screen and (max-width: 480px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+h3 {
+  font-weight: 400;
+  font-size: 1.3rem;
+  margin-top: 2rem;
+  margin-bottom: 1.4rem;
+  line-height: 1;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  width: 55%;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+p.subtitle {
+  font-style: italic;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  display: block;
+  line-height: 1;
+}
+
+.numeral {
+  font-family: et-book-roman-old-style;
+}
+
+.danger {
+  color: red;
+}
+
+article {
+  padding: 1rem 0rem;
+}
+@media only screen and (max-width: 480px) {
+  article {
+    padding: 2vh 1vw;
+  }
+}
+@media only screen and (480px < width) and (max-width: 1024px) {
+  article {
+    padding: 1rem 0rem;
+  }
+}
+
+p,
+dl,
+ol,
+ul {
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+}
+@media only screen and (max-width: 480px) {
+  p,
+  dl,
+  ol,
+  ul {
+    font-size: 0.9rem;
+    line-height: 1.5rem;
+  }
+}
+
+ul,
+ol {
+  padding-inline-start: 2rem;
+  padding-right: 0.5rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  background: #f7f7f6;
+  border-top: #111 1px dotted;
+  border-bottom: #111 1px dotted;
+}
+
+p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-right: 0;
+  vertical-align: baseline;
+}
+
+/* Chapter Epigraphs */
+div.epigraph {
+  margin: 5em 0;
+}
+
+div.epigraph > blockquote {
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
+
+div.epigraph > blockquote,
+div.epigraph > blockquote > p {
+  font-style: italic;
+}
+
+div.epigraph > blockquote > footer {
+  font-style: normal;
+}
+
+div.epigraph > blockquote > footer > cite {
+  font-style: italic;
+}
+
+/* end chapter epigraphs styles */
+blockquote {
+  font-size: 1.4rem;
+}
+blockquote p {
+  width: 55%;
+  margin-right: 40px;
+}
+blockquote footer {
+  width: 55%;
+  font-size: 1.1rem;
+  text-align: right;
+}
+
+section {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+}
+section > div {
+  max-width: 1050px;
+}
+section > p,
+section > footer,
+section > table {
+  /* 50 + 5 == 55, to be the same width as paragraph */
+  width: 55%;
+}
+section > dl,
+section > ol,
+section > ul {
+  width: 50%;
+  -webkit-padding-start: 5%;
+}
+
+dt:not(:first-child),
+li:not(:first-child) {
+  margin-top: 0.25rem;
+}
+
+/* Links: replicate underline that clears descenders */
+a:link,
+a:visited {
+  color: inherit;
+}
+
+.no-tufte-underline:link {
+  background: unset;
+  text-shadow: unset;
+}
+
+a:link,
+.tufte-underline,
+.hover-tufte-underline:hover {
+  text-decoration: none;
+  background: linear-gradient(#fffff8, #fffff8), linear-gradient(#fffff8, #fffff8), linear-gradient(currentColor, currentColor);
+  background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
+  background-repeat: no-repeat, no-repeat, repeat-x;
+  text-shadow: 0.03em 0 #fffff8, -0.03em 0 #fffff8, 0 0.03em #fffff8, 0 -0.03em #fffff8, 0.06em 0 #fffff8, -0.06em 0 #fffff8, 0.09em 0 #fffff8, -0.09em 0 #fffff8, 0.12em 0 #fffff8, -0.12em 0 #fffff8, 0.15em 0 #fffff8, -0.15em 0 #fffff8;
+  background-position: 0% 93%, 100% 93%, 0% 93%;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  a:link,
+  .tufte-underline,
+  .hover-tufte-underline:hover {
+    background-position-y: 87%, 87%, 87%;
+  }
+}
+/* Adds dark mode */
+a:link::-moz-selection {
+  background: #b4d5fe;
+}
+
+a:link::selection,
+a:link::-moz-selection {
+  background: #b4d5fe;
+}
+
+/* Sidenotes, margin notes, figures, captions */
+img {
+  max-width: 100%;
+}
+
+.sidenote,
+.marginnote {
+  float: right;
+  clear: right;
+  margin-right: -60%;
+  width: 50%;
+  margin-top: 0.3rem;
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  vertical-align: baseline;
+  position: relative;
+}
+
+.sidenote-number {
+  counter-increment: sidenote-counter;
+}
+
+.sidenote-number:after,
+.sidenote:before {
+  font-family: et-book-roman-old-style;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.sidenote-number:after {
+  content: counter(sidenote-counter);
+  font-size: 1rem;
+  top: -0.5rem;
+  left: 0.1rem;
+}
+
+.sidenote:before {
+  content: counter(sidenote-counter) " ";
+  font-size: 1rem;
+  top: -0.5rem;
+}
+
+blockquote .sidenote,
+blockquote .marginnote {
+  margin-right: -82%;
+  min-width: 59%;
+  text-align: left;
+}
+
+figure {
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  max-width: 55%;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  margin: 0 0 3em 0;
+}
+figure.fullwidth figcaption {
+  margin-right: 24%;
+}
+
+figcaption {
+  float: right;
+  clear: right;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  vertical-align: baseline;
+  position: relative;
+  max-width: 40%;
+}
+
+div.fullwidth {
+  width: 100%;
+}
+
+table.fullwidth {
+  width: 100%;
+}
+
+div.table-wrapper {
+  overflow-x: auto;
+  font-family: "Trebuchet MS", "Gill Sans", "Gill Sans MT", sans-serif;
+}
+
+@media (max-width: 768px) {
+  section > table {
+    width: 100%;
+  }
+  div.table-wrapper {
+    width: 85%;
+  }
+}
+code,
+pre > code {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 1rem;
+  line-height: 1.42;
+  -webkit-text-size-adjust: 100%;
+  /* Prevent adjustments of font size after orientation changes in iOS. See https://github.com/edwardtufte/tufte-css/issues/81#issuecomment-261953409 */
+}
+
+.sans > code {
+  font-size: 1.2rem;
+}
+
+h1 > code,
+h2 > code,
+h3 > code {
+  font-size: 0.8em;
+}
+
+.marginnote > code,
+.sidenote > code {
+  font-size: 1rem;
+}
+
+pre > code {
+  font-size: 0.9rem;
+  width: 52.5%;
+  margin-left: 2.5%;
+  overflow-x: auto;
+  display: block;
+}
+
+pre.fullwidth > code {
+  width: 90%;
+}
+
+.fullwidth {
+  max-width: 90%;
+  clear: both;
+}
+
+span.newthought {
+  font-variant: small-caps;
+  font-size: 1.2em;
+}
+
+input.margin-toggle {
+  display: none;
+}
+
+label.sidenote-number {
+  display: inline-block;
+  max-height: 2rem;
+  /* should be less than or equal to paragraph line-height */
+}
+label.margin-toggle:not(.sidenote-number) {
+  display: none;
+}
+
+.iframe-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+}
+.iframe-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  article {
+    width: 84%;
+    padding-left: 8%;
+    padding-right: 8%;
+  }
+  hr,
+  section > p,
+  section > footer {
+    width: 100%;
+  }
+  pre > code {
+    width: 97%;
+  }
+  section > dl,
+  section > ol,
+  section > ul {
+    width: 90%;
+  }
+  figure {
+    max-width: 90%;
+  }
+  figcaption,
+  figure.fullwidth figcaption {
+    margin-right: 0%;
+    max-width: none;
+  }
+  blockquote {
+    margin-left: 1.5em;
+    margin-right: 0em;
+  }
+  blockquote p,
+  blockquote footer {
+    width: 100%;
+  }
+  label.margin-toggle:not(.sidenote-number) {
+    display: inline;
+  }
+  .sidenote,
+  .marginnote {
+    display: none;
+  }
+  .margin-toggle:checked + .sidenote,
+  .margin-toggle:checked + .marginnote {
+    display: block;
+    float: left;
+    left: 1rem;
+    clear: both;
+    width: 95%;
+    margin: 1rem 2.5%;
+    vertical-align: baseline;
+    position: relative;
+  }
+  label {
+    cursor: pointer;
+  }
+  img {
+    width: 100%;
+  }
+}
+@media (max-width: 480px) {
+  article {
+    width: 98%;
+    padding-left: 1%;
+    padding-right: 1%;
+  }
+}
+@media (min-width: 768px) {
+  article {
+    width: 80%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+.default-theme,
+html[data-theme=default] {
+  --ls-primary-background-color: #fffff8;
+  --ls-primary-text-color: #111;
+}
+
+/* NM CLOZE COLOR */
+.nightMode .cloze,
+.night_mode .cloze {
+  color: mediumseagreen;
+}
+
+span.cloze {
+  color: mediumseagreen;
+}
+span.cloze.front {
+  font-family: "Arial", Courier, monospace;
+  letter-spacing: 0.2em;
+  font-size: 1.1em;
+  margin: 0 1em;
+  animation: pulse-front 1.2s 1;
+  animation-delay: 0.3s;
+}
+span.cloze.back {
+  font-size: 1.1em;
+  margin: 0 0.2em;
+  animation: pulse-back 1s 1;
+  animation-delay: 0s;
+  opacity: 1;
+}
+
+@keyframes pulse-front {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(51, 217, 178, 0.7);
+  }
+  40% {
+    transform: scale(1);
+    box-shadow: -1px 3px 3px 10px rgba(51, 217, 178, 0.2);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(51, 217, 178, 0);
+  }
+}
+@keyframes pulse-back {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(51, 217, 178, 0.7);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1);
+    box-shadow: -1px 3px 3px 10px rgba(51, 217, 178, 0.2);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(51, 217, 178, 0);
+    opacity: 1;
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(116, 221, 92, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(246, 13, 13, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(205, 7, 7, 0);
+  }
+}
+body {
+  -webkit-font-smoothing: auto;
+  /* Remove the default margin  */
+  margin: 0;
+  /* Tufte CSS styles */
+  margin-left: auto;
+  margin-right: auto;
+  counter-reset: sidenote-counter;
+}
+
+#qa {
+  padding: 0;
+  margin: 0;
+}
+
+.card,
+.card2 {
+  /* Remove the default margin  */
+  margin-left: auto;
+  margin-right: auto;
+  counter-reset: sidenote-counter;
+}
+
+.table-container {
+  overflow: auto;
+  scrollbar-width: none;
+  width: 100%;
+  height: 100%;
+}
+
+table {
+  display: table;
+  margin: 25px 10px;
+  font-size: 0.9rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  border-collapse: separate;
+  border-spacing: 0px;
+  white-space: nowrap;
+  border: 1px solid black;
+}
+table th,
+table td {
+  padding: 0.5em 0.5em;
+  border-left: 1px solid black;
+  text-align: center;
+}
+table thead tr {
+  color: #ffffff;
+  text-align: left;
+}
+table thead th {
+  background-color: #009879;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 1px dotted rgb(93, 93, 93);
+}
+table thead th:first-child {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  box-shadow: rgba(0, 0, 0, 0.32) 1px 1px 3px;
+  border-left: none;
+}
+table tbody {
+  border-bottom: 2px solid #009879;
+}
+table tbody tr {
+  border-bottom: 1px solid #afafaf;
+  font-size: 0.8rem;
+}
+table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+table tbody tr:nth-of-type(even) th {
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #f3f3f3;
+  border-top: 1px solid #f3f3f3;
+}
+table tbody tr:nth-of-type(odd) {
+  background-color: #ffffff;
+}
+table tbody tr:nth-of-type(odd) th {
+  background-color: #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-top: 1px solid #ffffff;
+}
+table tbody tr:hover th,
+table tbody tr:hover td {
+  color: #009879;
+  border-bottom: 1px solid #009879;
+  border-top: 1px solid #009879;
+}
+table tbody tr tr + tr:hover {
+  background-color: red;
+}
+table tbody tr th {
+  padding-left: 0.5em;
+  font-weight: normal;
+  text-align: left;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  border-right: 0px solid #393939;
+  border-left: none;
+  box-shadow: rgba(0, 0, 0, 0.32) 1px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+table caption {
+  text-align: left;
+  padding: 0.25rem;
+  position: sticky;
+  left: 0;
+}
+
+table.fullwidth {
+  width: 100%;
+}
+
+div.table-wrapper {
+  overflow-x: auto;
+  font-family: "Trebuchet MS", "Gill Sans", "Gill Sans MT", sans-serif;
+}
+
+@media (max-width: 768px) {
+  section > table {
+    width: 100%;
+  }
+  div.table-wrapper {
+    width: 85%;
+  }
+}
+iframe {
+  width: 100%;
+}
+
+ol li {
+  margin-left: -0.4rem;
+  padding-left: 7px;
+}
+
+li.caret {
+  list-style-type: none;
+  cursor: pointer;
+  margin-left: -1.5rem;
+  padding-left: 0;
+}
+li.caret .caret-text {
+  display: block;
+  background: #f7f1e7;
+}
+li.caret .caret-text::before {
+  content: "▶";
+  color: var(--ls-primary-text-color);
+  display: inline-block;
+  transition: transform 0.3s ease;
+  margin-right: 7px;
+  font-size: 0.9rem;
+}
+li.caret .caret-text:hover ~ ul.nested.show {
+  border-color: #633194;
+}
+li.caret.down > .caret-text::before {
+  transform: rotate(90deg);
+}
+li.caret.down::before,
+li.caret.down .caret-text {
+  background: #eff4f2;
+}
+
+li.caret.down:focus-visible > .caret-text,
+li.caret:focus-visible > .caret-text {
+  background: #e5e5e5;
+  background: rgb(230, 173, 173);
+}
+
+ol li.caret {
+  list-style-type: decimal;
+  margin-left: -0.4rem;
+}
+ol li.caret.down::marker {
+  font-size: 1.3rem;
+}
+ol li.caret .caret-text::before {
+  margin-left: 2px;
+}
+
+ul.nested,
+ol.nested {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  display: none;
+  padding-right: 0rem;
+  background: #fcf8f1;
+  font-size: 1em;
+  margin-left: 0.45rem;
+  border-left: 1px solid #caa761;
+  border-top: none;
+  border-bottom: 1px solid #caa761;
+  border-right: 1px solid #caa761;
+}
+ul.nested .nested,
+ol.nested .nested {
+  border-right: none;
+}
+ul.nested li,
+ol.nested li {
+  font-size: 0.95em;
+}
+
+.nested ol {
+  border-top: none;
+}
+
+li:focus,
+li:focus-visible {
+  outline: none;
+}
+
+li.caret.down:hover {
+  background: rgb(230, 173, 173);
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.nightMode.card,
+.night_mode .card,
+.nightMode #tags-container,
+.night_mode #tags-container {
+  background-color: #fffff8;
+  color: #111;
+}
+
+body {
+  background-color: #fffff8;
+  color: #111;
+}
+
+/* COLOR ACCENTS FOR BOLD-ITALICS-UNDERLINE*/
+b {
+  color: #9c4243;
+}
+
+/* BOLD STYLE */
+u {
+  color: #999658;
+}
+
+/* UNDERLINE STYLE */
+/* ITALICS STYLE */
+b u {
+  color: #ffdb47;
+}
+
+/* LINK STYLE */
+u i {
+  color: #a55fff;
+}
+
+/* HINT COLOR*/
+/* HINT REVEAL COLOR */
+/* Missed Questions Reveal Color */
+/* NM "EXTRA" FIELD COLOR */
+/* NM HINT COLOR */
+/* NM HINT REVEAL COLOR */
+.panel {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1%;
+  padding-right: 1%;
+  margin-left: 1%;
+  width: calc(97% - 4px);
+  display: none;
+  overflow: hidden;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 6px;
+  border-right: 2px solid #a8a8a8;
+  border-bottom: 4px solid #a8a8a8;
+  border-left: 2px solid #a8a8a8;
+  border-top: 0px solid #a8a8a8;
+  background-color: #fffcf5;
+}
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  background-color: #d1e7eb;
+  background: #d1e7eb;
+  cursor: pointer;
+  padding-left: 3%;
+  padding-right: 0%;
+  margin-top: 0.3rem;
+  width: calc(97% - 4px);
+  text-align: left;
+  border: 2px solid #bfdee3;
+  outline: none;
+  transition: 0.4s;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 7px;
+}
+.accordion:hover, .accordion:focus {
+  background-color: #adc5dc;
+}
+.accordion.active:hover {
+  background: #add4dc;
+}
+
+level-2 {
+  margin-left: 2rem;
+}
+
+level-3 {
+  margin-left: 3.5rem;
+}
+
+level-4 {
+  margin-left: 4rem;
+}
+
+level-5 {
+  margin-left: 5rem;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.accordion h2 {
+  margin: 0;
+}
+.accordion h3 {
+  margin: 0;
+}
+.accordion h4 {
+  margin: 0;
+}
+.accordion h5 {
+  margin: 0;
+}
+
+#tags {
+  display: none;
+}
+
+html {
+  max-width: 100vw;
+}
+
+table {
+  max-width: 100vw;
+}/*# sourceMappingURL=tiny6.css.map */

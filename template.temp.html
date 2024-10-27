@@ -1,0 +1,415 @@
+<script src="https://unpkg.com/prettier@2.3.2/standalone.js"></script>
+<script src="https://unpkg.com/prettier@2.3.2/parser-html.js"></script>
+<script src="https://unpkg.com/prettier@2.3.2/parser-babylon.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" />
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+<script src="web/jquery-3.5.1.min.js"></script> <!-- load local -->
+<script src="web/listReorder.js"></script> <!-- Load the external reordering script -->
+<script>
+        var myfontsize = "%(FONTSIZE)s";
+
+        tinymce.init({
+    skin: "%(SKIN)s",
+    theme: "%(THEME)s",
+    selector: '.tinymce6_wysiwyg',
+    auto_focus: 'tinymce6_wysiwyg_unique',
+    document_base_url: '../../../../../../',
+    body_class: 'bodyclass',
+    content_css: [%(CONTENTCSS)s],
+    formats: {
+        bold: { inline: 'b' },
+        italic: { inline: 'i' },
+        underline: { inline: 'u' }
+    },
+    force_br_newlines: false,
+    convert_newlines_to_brs: false,
+    forced_root_block: 'div',
+    extended_valid_elements: 'u,b,i',
+    autoresize: false,
+    invalid_styles: {
+        '*': 'width',
+        '*': 'text-align'
+    },
+
+    plugins: [
+        "advlist", "anchor", "accordion", "autolink", "charmap", "code", "codesample", "directionality",
+                "emoticons", "fullscreen", "help", "insertdatetime", "link", "lists", "media",
+                "nonbreaking", "searchreplace", "table", "visualblocks", "visualchars", "wordcount"
+            ],
+
+            text_patterns: [
+               // Formats
+               { start: '*', end: '*', format: 'italic' },
+                { start: '**', end: '**', format: 'bold' },
+                { start: '~', end: '~', format: 'strikethrough' },
+                { start: '`', end: '`', format: 'code' },
+                { start: '```', end: '```', format: 'pre' },
+                { start: '==', end: '==', format: 'mark' },
+                { start: '_', end: '_', format: 'subscript' },
+                { start: '^', end: '^', format: 'superscript' },
+                { start: '#', format: 'h1' },
+                { start: '##', format: 'h2' },
+                { start: '###', format: 'h3' },
+                { start: '####', format: 'h4' },
+                { start: '#####', format: 'h5' },
+                { start: '######', format: 'h6' },
+                { start: '* ', cmd: 'InsertUnorderedList' },
+                { start: '- ', cmd: 'InsertUnorderedList' },
+                { start: '1. ', cmd: 'InsertOrderedList', value: { 'list-style-type': 'decimal' } },
+                { start: '1) ', cmd: 'InsertOrderedList', value: { 'list-style-type': 'decimal' } },
+                { start: 'a. ', cmd: 'InsertOrderedList', value: { 'list-style-type': 'lower-alpha' } },
+                { start: 'a) ', cmd: 'InsertOrderedList', value: { 'list-style-type': 'lower-alpha' } },
+                { start: 'i. ', cmd: 'InsertOrderedList', value: { 'list-style-type': 'lower-roman' } },
+                { start: 'i) ', cmd: 'InsertOrderedList', value: { 'list-style-type': 'lower-roman' } },
+                { start: '---', replacement: '<hr/>' },
+                { start: '--', replacement: '—' },
+                { start: '(c)', replacement: '©' },
+                { start: '(r)', replacement: '®' },
+                { start: '(tm)', replacement: '™' },
+                { start: '...', replacement: '…' },
+                { start: '<<', replacement: '«' },
+                { start: '>>', replacement: '»' },
+                { start: '->', replacement: '→' },
+                { start: '<-', replacement: '←' },
+                { start: '==>', replacement: '⇒' },
+                { start: '<==', replacement: '⇐' },
+                { start: '!=', replacement: '≠' },
+                { start: '>=', replacement: '≥' },
+                { start: '<=', replacement: '≤' },
+                { start: '+-', replacement: '±'},
+                { start: '/d!', replacement: '¡' },
+                { start: '/d?', replacement: '¿' },
+                { start: '/deg', replacement: '°' },
+                { start: '/mu', replacement: 'μ' },
+                { start: '/ohm', replacement: 'Ω' },
+                { start: '/infty', replacement: '∞' },
+                { start: '/alpha', replacement: 'α' },
+                { start: '/beta', replacement: 'β' },
+                { start: '/gamma', replacement: 'γ' },
+                { start: '/delta', replacement: 'δ' },
+                { start: '/epsilon', replacement: 'ε' },
+                { start: '/zeta', replacement: 'ζ' },
+                { start: '/eta', replacement: 'η' },
+                { start: '/theta', replacement: 'θ' },
+                { start: '/iota', replacement: 'ι' },
+                { start: '/kappa', replacement: 'κ' },
+                { start: '/lambda', replacement: 'λ' },
+                { start: '/mu', replacement: 'μ' },
+                { start: '/nu', replacement: 'ν' },
+                { start: '/xi', replacement: 'ξ' },
+                { start: '/omicron', replacement: 'ο' },
+                { start: '/pi', replacement: 'π' },
+                { start: '/rho', replacement: 'ρ' },
+                { start: '/sigma', replacement: 'σ' },
+                { start: '/tau', replacement: 'τ' },
+                { start: '/upsilon', replacement: 'υ' },
+                { start: '/phi', replacement: 'φ' },
+                { start: '/chi', replacement: 'χ' },
+                { start: '/psi', replacement: 'ψ' },
+                { start: '/omega', replacement: 'ω' },
+                { start: '/Gamma', replacement: 'Γ' },
+                { start: '/Delta', replacement: 'Δ' },
+                { start: '/Theta', replacement: 'Θ' },
+                { start: '/Lambda', replacement: 'Λ' },
+                { start: '/Xi', replacement: 'Ξ' },
+                { start: '/Pi', replacement: 'Π' },
+                { start: '/Sigma', replacement: 'Σ' },
+                { start: '/Upsilon', replacement: 'Υ' },
+                { start: '/Phi', replacement: 'Φ' },
+                { start: '/Psi', replacement: 'Ψ' },
+                { start: '/Omega', replacement: 'Ω' },
+                { start: '/int', replacement: '∫' },
+                { start: '/sum', replacement: '∑' },
+                { start: '/prod', replacement: '∏' },
+                { start: '/lim', replacement: 'lim' },
+                { start: '/in', replacement: '∈' },
+                { start: '/notin', replacement: '∉' },
+                { start: '/subset', replacement: '⊂' },
+                { start: '/subseteq', replacement: '⊆' },
+                { start: '/supset', replacement: '⊃' },
+                { start: '/supseteq', replacement: '⊇' },
+                { start: '/cup', replacement: '∪' },
+                { start: '/cap', replacement: '∩' },
+                { start: '/emptyset', replacement: '∅' },
+                { start: '/nabla', replacement: '∇' },
+                { start: '/partial', replacement: '∂' },
+                { start: '/forall', replacement: '∀' },
+                { start: '/exists', replacement: '∃' },
+                { start: '/neg', replacement: '¬' },
+                { start: '/wedge', replacement: '∧' },
+                { start: '/vee', replacement: '∨' },
+                { start: '/rightarrow', replacement: '→' },
+                { start: '/leftarrow', replacement: '←' },
+                { start: '/Rightarrow', replacement: '⇒' },
+                { start: '/Leftarrow', replacement: '⇐' },
+                { start: '/leftrightarrow', replacement: '↔' },
+                { start: '/Leftrightarrow', replacement: '⇔' },
+                { start: '/vdash', replacement: '⊢' },
+                { start: '/models', replacement: '⊨' },
+                { start: '/perp', replacement: '⊥' },
+                { start: '/angle', replacement: '∠' },
+                { start: '/triangle', replacement: '△' },
+                { start: '/square', replacement: '□' },
+                { start: '/diamond', replacement: '◇'},
+                // Medical
+                { start: '/ddx', replacement: 'Differentialdiagnoser' },
+                { start: '/d!', replacement: '¡' },
+                { start: '/d?', replacement: '¿' },
+                { start: '/deg', replacement: '°' },
+                { start: '/mu', replacement: 'μ' },
+                { start: '/ohm', replacement: 'Ω' },
+                { start: '/infty', replacement: '∞' },
+                { start: '/alpha', replacement: 'α' },
+                { start: '/beta', replacement: 'β' },
+                { start: '/gamma', replacement: 'γ' },
+                { start: '/delta', replacement: 'δ' },
+                { start: '/epsilon', replacement: 'ε' },
+                { start: '/zeta', replacement: 'ζ' },
+                { start: '/eta', replacement: 'η' },
+                { start: '/theta', replacement: 'θ' },
+                { start: '/iota', replacement: 'ι' },
+                { start: '/kappa', replacement: 'κ' },
+                { start: '/lambda', replacement: 'λ' },
+                { start: '/mu', replacement: 'μ' },
+                { start: '/nu', replacement: 'ν' },
+                { start: '/xi', replacement: 'ξ' },
+                { start: '/omicron', replacement: 'ο' },
+                { start: '/pi', replacement: 'π' },
+                { start: '/rho', replacement: 'ρ' },
+                { start: '/sigma', replacement: 'σ' },
+                { start: '/tau', replacement: 'τ' },
+                { start: '/upsilon', replacement: 'υ' },
+                { start: '/phi', replacement: 'φ' },
+                { start: '/chi', replacement: 'χ' },
+                { start: '/psi', replacement: 'ψ' },
+                { start: '/omega', replacement: 'ω' },
+                { start: '/Gamma', replacement: 'Γ' },
+                { start: '/Delta', replacement: 'Δ' },
+                { start: '/Theta', replacement: 'Θ' },
+                { start: '/Lambda', replacement: 'Λ' },
+                { start: '/Xi', replacement: 'Ξ' },
+                { start: '/Pi', replacement: 'Π' },
+                { start: '/Sigma', replacement: 'Σ' },
+                { start: '/Upsilon', replacement: 'Υ' },
+                { start: '/Phi', replacement: 'Φ' },
+                { start: '/Psi', replacement: 'Ψ' },
+                { start: '/Omega', replacement: 'Ω' },
+                { start: '/int', replacement: '∫' },
+                { start: '/sum', replacement: '∑' },
+                { start: '/prod', replacement: '∏' },
+                { start: '/lim', replacement: 'lim' },
+                { start: '/in', replacement: '∈' },
+                { start: '/notin', replacement: '∉' },
+                { start: '/subset', replacement: '⊂' },
+                { start: '/subseteq', replacement: '⊆' },
+                { start: '/supset', replacement: '⊃' },
+                { start: '/supseteq', replacement: '⊇' },
+                { start: '/cup', replacement: '∪' },
+                { start: '/cap', replacement: '∩' },
+                { start: '/emptyset', replacement: '∅' },
+                { start: '/nabla', replacement: '∇' },
+                { start: '/partial', replacement: '∂' },
+                { start: '/forall', replacement: '∀' },
+                { start: '/exists', replacement: '∃' },
+                { start: '/neg', replacement: '¬' },
+                { start: '/wedge', replacement: '∧' },
+                { start: '/vee', replacement: '∨' },
+                { start: '/rightarrow', replacement: '→' },
+                { start: '/leftarrow', replacement: '←' },
+                { start: '/Rightarrow', replacement: '⇒' },
+                { start: '/Leftarrow', replacement: '⇐' },
+                { start: '/leftrightarrow', replacement: '↔' },
+                { start: '/Leftrightarrow', replacement: '⇔' },
+                { start: '/vdash', replacement: '⊢' },
+                { start: '/models', replacement: '⊨' },
+                { start: '/perp', replacement: '⊥' },
+                { start: '/angle', replacement: '∠' },
+                { start: '/triangle', replacement: '△' },
+                { start: '/square', replacement: '□' },
+                { start: '/diamond', replacement: '◇'},
+                // Medical
+                { start: '/ddx', replacement: 'Differential Diagnosis' },
+                { start: '/ttx', replacement: 'Treatments'},
+
+  ],
+
+    toolbar1: '%(TOOLBAR1)s | accordion | removeTableStylesButton fullscreen moveItemUp moveItemDown',  // Add the button to the toolbar
+    toolbar2: '%(TOOLBAR2)s',
+    statusbar: false,
+    promotion: false,
+    menubar: 'edit view insert format tools table help media image',
+    removed_menuitems: 'file print',
+    contextmenu: "link inserttable | cell row column deletetable",
+
+    setup: function (editor) {
+        editor.on('init', function () {
+            this.getDoc().body.style.fontSize = `${myfontsize.toString()}px`;
+            this.getDoc().body.style.fontFamily = '%(FONTNAME)s';
+            %(CUSTOMBGCOLOR)s
+            editor.execCommand('mceFullScreen');
+            editor.execCommand('mceVisualBlocks');
+        });
+
+                // Add shortcut to toggle source code view
+                editor.addShortcut("Ctrl+Shift+X", "Toggle Source Code", "mceCodeEditor");
+
+
+                editor.on('OpenWindow', function(e) {
+            var dialogTitle = e.target.getEl().querySelector('.tox-dialog__title');
+            if (dialogTitle && dialogTitle.innerText === 'Source Code') {
+                tinymce.activeEditor.windowManager.alert('Hello world!');
+                alert('Source code editing formatting test');
+                var textarea = e.target.getEl().querySelector('textarea.tox-textarea');
+                if (textarea) {
+                    textarea.value = prettier.format(textarea.value, {
+                        parser: 'html',
+                        plugins: prettierPlugins
+                    });
+                }
+            }
+        });
+
+
+                // Custom command to remove specific inline styles from table elements
+                editor.addCommand('removeTableStyles', function () {
+                    // Get the current HTML content
+                    const content = editor.getContent();
+
+                    // Use DOMParser to parse the HTML content
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(content, 'text/html');
+
+                    // Select table-related elements and remove specified inline styles
+                    const tableElm = doc.querySelectorAll('table, th, td, tr, col, colgroup');
+                    const paragraphElm = doc.querySelectorAll('span, div, p');
+
+                    tableElm.forEach(el => {
+                        el.style.removeProperty('width');
+                        el.style.removeProperty('height');
+                        el.style.removeProperty('font-size');
+                        el.style.removeProperty('text-align');
+                        el.style.removeProperty('border-collapse');
+                        el.style.removeProperty('border');
+                    });
+
+                    paragraphElm.forEach(el => {
+                        el.style.removeProperty('text-align');
+                        el.style.removeProperty('font-size');
+                        el.style.removeProperty('color');
+                    });
+
+                    // Set the modified HTML content back into the editor
+                    editor.setContent(doc.body.innerHTML);
+                });
+
+                // Register the button for the custom command
+                editor.ui.registry.addButton('removeTableStylesButton', {
+                    text: 'Clear',
+                    tooltip: 'Remove width, height, font-size, and text-align from table elements',
+                    onAction: () => editor.execCommand('removeTableStyles')
+                });
+
+                // Additional commands for cloze
+                editor.addCommand('nextCloze', function () {
+                    let selected_text = editor.selection.getContent({ format: 'html' });
+                    let content = editor.getContent();
+                    let return_text = newClozeText(content, selected_text, false);
+                    editor.execCommand('mceInsertContent', 0, return_text);
+                });
+                editor.addShortcut('ctrl+shift+c', 'nextCloze', 'nextCloze');
+                editor.ui.registry.addButton('nextCloze', {
+                    text: 'Cln',
+                    tooltip: 'nextCloze' + '(' + 'ctrl+shift+c' + ')',
+                    onAction: () => { editor.execCommand('nextCloze'); }
+                });
+            }
+        });
+
+        // usused
+        // highlight
+        // https://stackoverflow.com/a/17611715
+        // https://stackoverflow.com/a/49841804
+        function hilite(editor, tinymce, name, color, key, buttontext){
+            // https://www.tiny.cloud/docs/api/tinymce/tinymce.editor/#addcommand
+            // the command that you add with addCommand can be executed with execCommand.
+            editor.addCommand(name, function () {
+                let n = tinymce.activeEditor.selection.getNode();
+                let c = tinymce.activeEditor.dom.getStyle(n, 'background-color', true);
+                if (c ==color) {
+                    nc = "transparent";
+                }
+                else{
+                    nc =color;
+                }
+                tinymce.activeEditor.execCommand('HiliteColor', false, nc);
+            });
+            editor.addShortcut(key, name, name);
+            // https://www.tiny.cloud/docs/ui-components/typesoftoolbarbuttons/
+            editor.ui.registry.addButton(name, {
+                text: buttontext,
+                tooltip: name + '(' + key + ')',
+                onAction: () => {editor.execCommand(name);}
+            });
+        }
+
+
+        function newClozeText (content, selected_text, same) {
+        // this function is adjusted from kian which is
+        //    Copyright (C) 2018 Hyun Woo Park, License: AGPLv3, http://www.gnu.org/licenses/.
+        // https://github.com/phu54321/kian/blob/develop/src/components/editor/utils/cloze.js
+        var maxClozeId = 0;
+        content.replace(/\{\{c(\d+)::/g, (match, g1) => {
+            const clozeId = parseInt(g1)
+            if (maxClozeId < clozeId) maxClozeId = clozeId
+        })
+        if(same){
+            var newClozeIndex = Math.max(maxClozeId, 1);
+            }
+        else{
+            var newClozeIndex = maxClozeId + 1;
+        }
+        var text = '{{c' + newClozeIndex + '::' + selected_text + '}}';
+        return text;
+        };
+
+
+        // unused
+        // preparation for cloze overlapper: the actual clozes - ctrl+shift+c need to be made from
+        // the regular Add window
+        function newOCclozeText (content, selected_text, same) {
+        //this function is adjusted from kian which is
+        //    Copyright (C) 2018 Hyun Woo Park, License: AGPLv3, http://www.gnu.org/licenses/.
+        //https://github.com/phu54321/kian/blob/develop/src/components/editor/utils/cloze.js
+        var maxClozeId = 0;
+        content.replace(/\[\[oc(\d+)::/g, (match, g1) => {
+            const clozeId = parseInt(g1)
+            if (maxClozeId < clozeId) maxClozeId = clozeId
+        })
+        if(same){
+            var newClozeIndex = Math.max(maxClozeId, 1);
+        }
+        else{
+            var newClozeIndex = maxClozeId + 1;
+        }
+        var text = '[[oc' + newClozeIndex + '::' + selected_text + ']]';
+        return text;
+        };
+
+
+
+    function resize_tiny_mce() {
+        tinyMCE.activeEditor.execCommand('mceFullScreen');
+    }
+    window.addEventListener('resize', resize_tiny_mce);
+
+    // Add event listener to close the editor on Esc
+    editor.on('keydown', function (e) {
+        if (e.key === 'Escape') {
+            editor.remove();  // Closes the editor instance
+        }
+    });
+
+</script>
+
+<div class="tinymce6_wysiwyg" id="tinymce6_wysiwyg_unique">CONTENTCONTENT</div>
