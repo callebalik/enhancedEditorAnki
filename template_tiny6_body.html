@@ -255,127 +255,14 @@
             editor.execCommand('mceVisualBlocks');
         });
 
-                // Load external scripts
-                sourceCodeMain(editor);
-                cleanInlineStyles(editor);
-                clozesMain(editor);
-                shortcutsMain(editor);
+        // Load external scripts
+        sourceCodeMain(editor);
+        cleanInlineStyles(editor);
+        clozesMain(editor);
+        shortcutsMain(editor);
 
-
-        /* unused: for incremental reading
-            var myexQ;
-            var myexA;
-            editor.addCommand('extractAsQuestion', function() {
-                myexQ = editor.selection.getContent({ format: 'html' });
-                editor.execCommand('delete', 0, myexQ);
-            });
-            editor.addShortcut('alt+s', 'extractAsQuestion', 'extractAsQuestion');
-            editor.ui.registry.addButton('extractAsQuestion', {
-                    text: 'eQ',
-                    tooltip: 'extractAsQuestion' + '(' + 'alt+s' + ')',
-                    onAction: () => {editor.execCommand('extractAsQuestion');}
-            });
-
-                // Additional commands for cloze
-                editor.addCommand('nextCloze', function () {
-                    let selected_text = editor.selection.getContent({ format: 'html' });
-                    let content = editor.getContent();
-                    let return_text = newClozeText(content, selected_text, false);
-                    editor.execCommand('mceInsertContent', 0, return_text);
-                });
-                editor.addShortcut('ctrl+shift+c', 'nextCloze', 'nextCloze');
-                editor.ui.registry.addButton('nextCloze', {
-                    text: 'Cln',
-                    tooltip: 'nextCloze' + '(' + 'ctrl+shift+c' + ')',
-                    onAction: () => { editor.execCommand('nextCloze'); }
-                });
-            }
-        });
-
-        // usused
-        // highlight
-        // https://stackoverflow.com/a/17611715
-        // https://stackoverflow.com/a/49841804
-        function hilite(editor, tinymce, name, color, key, buttontext){
-            // https://www.tiny.cloud/docs/api/tinymce/tinymce.editor/#addcommand
-            // the command that you add with addCommand can be executed with execCommand.
-            editor.addCommand(name, function () {
-                let n = tinymce.activeEditor.selection.getNode();
-                let c = tinymce.activeEditor.dom.getStyle(n, 'background-color', true);
-                if (c ==color) {
-                    nc = "transparent";
-                }
-                else{
-                    nc =color;
-                }
-                tinymce.activeEditor.execCommand('HiliteColor', false, nc);
-            });
-            editor.addShortcut(key, name, name);
-            // https://www.tiny.cloud/docs/ui-components/typesoftoolbarbuttons/
-            editor.ui.registry.addButton(name, {
-                text: buttontext,
-                tooltip: name + '(' + key + ')',
-                onAction: () => {editor.execCommand(name);}
-            });
-        }
-
-
-        function newClozeText (content, selected_text, same) {
-        // this function is adjusted from kian which is
-        //    Copyright (C) 2018 Hyun Woo Park, License: AGPLv3, http://www.gnu.org/licenses/.
-        // https://github.com/phu54321/kian/blob/develop/src/components/editor/utils/cloze.js
-        var maxClozeId = 0;
-        content.replace(/\{\{c(\d+)::/g, (match, g1) => {
-            const clozeId = parseInt(g1)
-            if (maxClozeId < clozeId) maxClozeId = clozeId
-        })
-        if(same){
-            var newClozeIndex = Math.max(maxClozeId, 1);
-            }
-        else{
-            var newClozeIndex = maxClozeId + 1;
-        }
-        var text = '{{c' + newClozeIndex + '::' + selected_text + '}}';
-        return text;
-        };
-
-
-        // unused
-        // preparation for cloze overlapper: the actual clozes - ctrl+shift+c need to be made from
-        // the regular Add window
-        function newOCclozeText (content, selected_text, same) {
-        //this function is adjusted from kian which is
-        //    Copyright (C) 2018 Hyun Woo Park, License: AGPLv3, http://www.gnu.org/licenses/.
-        //https://github.com/phu54321/kian/blob/develop/src/components/editor/utils/cloze.js
-        var maxClozeId = 0;
-        content.replace(/\[\[oc(\d+)::/g, (match, g1) => {
-            const clozeId = parseInt(g1)
-            if (maxClozeId < clozeId) maxClozeId = clozeId
-        })
-        if(same){
-            var newClozeIndex = Math.max(maxClozeId, 1);
-        }
-        else{
-            var newClozeIndex = maxClozeId + 1;
-        }
-        var text = '[[oc' + newClozeIndex + '::' + selected_text + ']]';
-        return text;
-        };
-
-
-
-    function resize_tiny_mce() {
-        tinyMCE.activeEditor.execCommand('mceFullScreen');
     }
-    window.addEventListener('resize', resize_tiny_mce);
-
-    // Add event listener to close the editor on Esc
-    editor.on('keydown', function (e) {
-        if (e.key === 'Escape') {
-            editor.remove();  // Closes the editor instance
-        }
-    });
-
+});
 </script>
 
 <div class="tinymce6_wysiwyg" id="tinymce6_wysiwyg_unique">CONTENTCONTENT</div>
