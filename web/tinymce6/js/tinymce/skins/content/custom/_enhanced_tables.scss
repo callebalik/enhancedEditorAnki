@@ -1,0 +1,156 @@
+@import "table_nested_content";
+
+$header-row-bg-color: #009879;
+$table-row-border-color: #121010;
+$table-td-dark-bg-color: #ffffff;
+$table-td-light-bg-color: #f3f3f3;
+$first-column-max-width: 20px;
+$header-column-bg-color: rgb(255, 230, 92);
+
+$front-z-index: 10;
+$middle-z-index: 5;
+$back-z-index: 0;
+
+.table-container {
+    // overflow: auto;
+    scrollbar-width: none;
+    width: 100%;
+    height: 100%;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+/* General Table Styling */
+table {
+    // Should be wrapaped in container. So use that width instead.
+    // width: 100%; // Make table take up full width of container
+    font-size: 0.9rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid black;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    white-space: nowrap;
+    table-layout: auto;
+    /* Allow table to adjust column widths based on content */
+
+    //    General table cell styling
+    th,
+    td {
+        padding: 0.5em 0.5em; // Give half a letter of padding right and left to cells to make them look less cramped
+        border-left: 1px solid black;
+        // border-right: 1px solid black;
+        white-space: normal;
+        /* Allow text to wrap */
+        word-wrap: break-word;
+        /* For legacy browsers */
+        overflow-wrap: anywhere;
+        /* Break words anywhere to prevent overflow */
+    }
+
+    thead {
+        tr {
+            color: $table-td-dark-bg-color;
+            text-align: left;
+            border-bottom: 1px dotted rgb(93, 93, 93);
+            position: sticky;
+            box-shadow: rgba(0, 0, 0, 0.32) 1px 1px 3px;
+            top: 0;
+            z-index: $front-z-index;
+            background-color: $header-row-bg-color;
+        }
+
+        th,
+        td {
+            text-align: center;
+
+        }
+
+        th:first-child {
+            // keep first column header on top of other heders when horizontally scrolling. Z-index > z-index of thead th elements
+            position: sticky;
+            left: 0;
+            top: 0;
+            z-index: 3;
+            box-shadow: rgba(0, 0, 0, 0.32) 1px 1px 3px;
+            border-left: none;
+        }
+    }
+
+    tbody {
+        // Bottom border to delimit table from footer
+        border-bottom: 2px solid $header-row-bg-color;
+
+        tr {
+            border-top: 1px solid $table-row-border-color;
+            border-bottom: 1px solid $table-row-border-color;
+            font-size: 0.8rem;
+
+            // Even and odd rows have different background colors. Important to specifically add to th to make first column have a background to cover other columns when scrolling horizontally.
+            &:nth-of-type(even) {
+                background-color: $table-td-light-bg-color;
+                //   Keep rows from jumping when border is added on hover
+            }
+
+            &:nth-of-type(odd) {
+                background-color: $table-td-dark-bg-color;
+            }
+
+            &:last-of-type {
+                // border-bottom: 2px solid $header-bg-color;
+            }
+
+            &:hover {
+
+                th,
+                td {
+                    color: $header-row-bg-color;
+                }
+            }
+
+
+            th {
+                padding-left: 0.5em; //Add just a little padding to the left of the first non-header column
+                font-weight: normal;
+                // max-width: $first-column-max-width;
+                text-align: center;
+                position: sticky;
+                left: 0;
+                z-index: 2;
+                border-right: 0px solid #393939;
+                border-left: none;
+                box-shadow: rgba(0, 0, 0, 0.32) 1px 1px 3px,
+                    rgba(0, 0, 0, 0.24) 0px 1px 2px;
+            }
+        }
+    }
+}
+
+table caption {
+    text-align: left;
+    padding: 0.25rem;
+    position: sticky;
+    left: 0;
+}
+
+// Colors
+table {
+
+    // Header cells, not in first row
+    tbody tr {
+        th {
+            background-color: $header-column-bg-color;
+        }
+    }
+
+    thead tr {
+        background-color: $header-row-bg-color;
+    }
+}
+
+
+table {
+
+    ul,
+    ol {}
+}

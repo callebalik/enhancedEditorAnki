@@ -1,0 +1,32 @@
+table {
+
+    td img {
+        max-height: 25vh;
+        width: auto;
+        margin: 0 auto;
+    }
+
+
+    ul,
+    ol {
+
+        max-width: 100%;
+        background: inherit;
+        font-size: 1em;
+        border: none;
+        // padding: 0;
+        line-height: 1.7em;
+        padding-inline-start: 1.7em;
+        /* padding-left: 0; */
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    li.caret {
+        list-style-type: none;
+        cursor: pointer;
+        margin-left: -1.5rem;
+        padding-left: 0;
+    }
+}

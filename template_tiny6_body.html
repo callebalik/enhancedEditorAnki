@@ -246,7 +246,7 @@
 
   ],
 
-    toolbar1: '%(TOOLBAR1)s | accordion | removeTableStylesButton unwrapParent removeClozeHighlighting moveItemDown',  // Add the button to the toolbar
+    toolbar1: '%(TOOLBAR1)s | removeTableStylesButton fixDomHierarchyButton unwrapParent removeClozeHighlighting moveItemDown getClassOfCurrentElement makeCurrentRowHeaderButton makeCurrentCellHeaderButton deleteCurrentElementButton getCurrentNodeButton',  // Add the button to the toolbar
     toolbar2: '%(TOOLBAR2)s',
     statusbar: false,
     promotion: false,
@@ -266,7 +266,7 @@
 
         // Load external scripts
         sourceCodeMain(editor);
-        cleanInlineStyles(editor);
+        registerFormatters(editor);
         clozesMain(editor);
         shortcutsMain(editor);
 

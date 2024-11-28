@@ -47,6 +47,18 @@ function clozesMain(editor) {
       editor.execCommand("clozeNumber");
     },
   });
+
+    // Add event listener for double-click on the editor
+    editor.on('dblclick', function (e) {
+        const clickedElement = e.target;
+        console.log(clickedElement);
+
+        // Check if the clicked element is a cloze bracket
+        if (clickedElement.classList.contains('cloze-brackets')) {
+            console.log('Opening cloze edit dialog');
+            openClozeEditDialog(editor, clickedElement.parentNode);
+        }
+      });
 }
 
 function newClozeText(content, selected_text, same) {
@@ -158,3 +170,53 @@ function addClozeHighlighting(content) {
 function toggleClozeHighlighting(editor) {
     $
 }
+
+// Function to open a dialog to edit the cloze number
+function openClozeEditDialog(editor, clozeElement) {
+    console.log(clozeElement);
+    const currentNumber = clozeElement.textContent.match(/\{\{c(\d+)::/)[1];
+    console.log('current cloze number', currentNumber);
+    const newNumber = prompt("Edit Cloze Number:", currentNumber);
+
+    if (newNumber !== null && newNumber !== "0" && newNumber !== currentNumber) {
+      const newContent = clozeElement.textContent.replace(/\{\{c\d+::/, `{{c${newNumber}::`);
+      clozeElement.textContent = newContent;
+      editor.nodeChanged();
+    } else if (newNumber === currentNumber) {
+      console.log('No change in cloze number');
+    } else if (newNumber === "0") {
+        console.log('Removing cloze');
+        removeCloze(clozeElement);
+        editor.nodeChanged();
+        // applyClozeHighlighting(editor);
+    }
+
+  }
+
+
+  function removeCloze(clozeElement) {
+    const content = clozeElement.textContent;
+    const newContent = content.replace(/\{\{c\d+::.*?::.*?}}/g, '').replace(/\{\{c\d+::/g, '').replace(/}}/g, '');
+    clozeElement.textContent = newContent;
+    console.log('Cloze removed from:', newContent);
+  }
+
+
+  function findClozeBeggningBrackets(content) {
+    let clozeBeggningBrackets = content.match(/\{\{c\d+::/g);
+    return clozeBeggningBrackets;
+  }
+
+    function findClozeEndingBrackets(content) {
+        let clozeEndingBrackets = content.match(/}}/g);
+        return clozeEndingBrackets;
+    }
+
+    function findClozeNumbers(content) {
+        let clozeNumbers = content.match(/\{\{c\d+::/g);
+        return clozeNumbers;
+    }
+    function findClozeHint(content) {
+        let clozeHints = content.match(/::.*?}}/g);
+        return clozeHint;
+    }

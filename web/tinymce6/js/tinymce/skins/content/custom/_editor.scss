@@ -18,35 +18,23 @@ body#tinymce {
     h4,
     h5 {
         background-color: #c6f1fc;
+        border: 1px solid #4099ff;
+        font-size: 1rem;
+    }
+    h1 {
+        font-size: 1.3rem;
+        padding: 0.1em;
+        margin-block-start: 0.1em;
+    margin-block-end: 0.1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
     }
 
     h2 {
         font-size: 1.1rem;
+        margin:0.1em;
     }
 
-    table {
-        table-layout: fixed;
-        width: 100%;
-        overflow-wrap: break-word;
-        width: 100% !important;
-        max-width: 98vw !important;
-        background-color: #f3adad;
-
-        tbody {
-            max-width: 98vw !important;
-        }
-
-        td, th {
-            white-space: normal;       /* Allows line breaks */
-            overflow-wrap: break-word;  /* Break long words */
-            word-break: break-word;     /* Force line break within words if needed */
-        }
-    }
-
-    img {
-        max-height: 20vh;
-        width: auto;
-    }
 
 
 
