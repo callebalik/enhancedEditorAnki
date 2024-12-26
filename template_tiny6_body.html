@@ -2,7 +2,10 @@
 <script src="https://unpkg.com/prettier@2.3.2/parser-html.js"></script>
 <!-- <script src="https://unpkg.com/prettier@2.3.2/parser-babylon.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" />
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css"
+/>
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <script src="_addons/805891399/web/jquery-3.5.1.min.js"></script> <!-- load local -->
 <script src="_addons/805891399/web/listReorder.js"></script> <!-- Load the external reordering script -->
@@ -10,6 +13,7 @@
 <script src="_addons/805891399/web/clozes.js"></script>
 <script src="_addons/805891399/web/formatter.js"></script>
 <script src="_addons/805891399/web/sourceCode.js"></script>
+<script src="_addons/805891399/web/tables.js"></script>
 <script>
         var myfontsize = "%(FONTSIZE)s";
             // Define a global flag for save state
@@ -246,33 +250,30 @@
 
   ],
 
-    toolbar1: '%(TOOLBAR1)s | removeTableStylesButton fixDomHierarchyButton unwrapParent removeClozeHighlighting moveItemDown getClassOfCurrentElement makeCurrentRowHeaderButton makeCurrentCellHeaderButton deleteCurrentElementButton getCurrentNodeButton',  // Add the button to the toolbar
-    toolbar2: '%(TOOLBAR2)s',
-    statusbar: false,
-    promotion: false,
-    menubar: 'edit view insert format tools table help media image',
-    removed_menuitems: 'file print',
-    contextmenu: "link inserttable | cell row column deletetable",
-
-    setup: function (editor) {
-        editor.on('init', function () {
-            this.getDoc().body.style.fontSize = `${myfontsize.toString()}px`;
-            this.getDoc().body.style.fontFamily = '%(FONTNAME)s';
+        table_toolbar: tableToolbarConfig,
             %(CUSTOMBGCOLOR)s
             editor.execCommand('mceFullScreen');
             editor.execCommand('mceVisualBlocks');
             applyClozeHighlighting(editor);
         });
 
-        // Load external scripts
-        sourceCodeMain(editor);
-        registerFormatters(editor);
-        clozesMain(editor);
-        shortcutsMain(editor);
+            moveColumnLeft(editor);
+            moveColumnRight(editor);
+            moveRowUp(editor);
+            moveRowDown(editor);
+            removeTableStyles(editor);
+            addTableMenu(editor);
 
-        editor.on('dblclick', function (e) {
-            const selection = editor.selection;
-            const rng = selection.getRng();
+            // Add custom table commands
+            addCustomTableCommands(editor)
+
+            // Add a button to invoke the custom command
+            editor.ui.registry.addButton('customTableButton', {
+                text: 'Custom Table Command',
+                onAction: function () {
+                    editor.execCommand('customTableCommand');
+                }
+            });
 
             // Check if selection includes trailing whitespace
             const selectedText = selection.getContent({ format: 'text' });

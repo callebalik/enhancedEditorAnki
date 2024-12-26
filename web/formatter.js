@@ -1,54 +1,3 @@
-function cleanInlineStyles(editor) {
-  // Custom command to remove specific inline styles from table elements
-  editor.addCommand("removeTableStyles", function () {
-    // Get the current HTML content
-    const content = editor.getContent();
-
-    // Use DOMParser to parse the HTML content
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, "text/html");
-
-    // Select table-related elements and remove specified inline styles
-    const tableElm = doc.querySelectorAll("table, th, td, tr, col, colgroup");
-    const paragraphElm = doc.querySelectorAll("span, div, p");
-
-    tableElm.forEach((el) => {
-      el.style.removeProperty("width");
-      el.style.removeProperty("height");
-      el.style.removeProperty("font-size");
-      el.style.removeProperty("text-align");
-      el.style.removeProperty("border-collapse");
-      el.style.removeProperty("border");
-    });
-
-    paragraphElm.forEach((el) => {
-      el.style.removeProperty("text-align");
-      el.style.removeProperty("font-size");
-      el.style.removeProperty("color");
-    });
-
-    doc.querySelectorAll("td>div, th>div").forEach((el) => {
-      unwrap(el);
-    });
-
-    // Check for empty elements and remove them
-    doc.querySelectorAll("p, span, div").forEach((el) => {
-      removeEmptyElement(el);
-    });
-
-    // Set the modified HTML content back into the editor
-    editor.setContent(doc.body.innerHTML);
-  });
-
-  // Register the button for the custom command
-  editor.ui.registry.addButton("removeTableStylesButton", {
-    text: "🧹Tables",
-    tooltip:
-      "Remove width, height, font-size, and text-align from table elements",
-    onAction: () => editor.execCommand("removeTableStyles"),
-  });
-}
-
 function fixDomHierarchy(editor) {
   editor.addCommand("fixDomHierarchy", function () {
     // Get the current HTML content
@@ -182,68 +131,6 @@ function getClassOfCurrentElement(editor) {
   });
 }
 
-function makeCurrentRowHeader(editor) {
-  editor.addCommand("makeCurrentRowHeader", function () {
-    const selection = editor.selection;
-    const selectedNode = selection.getNode();
-    const row = editor.dom.getParent(selectedNode, "tr");
-
-    if (row) {
-      const table = editor.dom.getParent(row, "table");
-      if (table) {
-        let thead = table.querySelector("thead");
-        if (!thead) {
-          thead = editor.dom.create("thead");
-          table.insertBefore(thead, table.firstChild);
-        }
-
-        // Move the row to the thead
-        thead.appendChild(row);
-
-        // Change all td elements in the row to th
-        const cells = row.querySelectorAll("td");
-        cells.forEach((cell) => {
-          const th = editor.dom.create("th", {}, cell.innerHTML);
-          row.replaceChild(th, cell);
-        });
-
-        editor.nodeChanged();
-      }
-    }
-  });
-  editor.ui.registry.addButton("makeCurrentRowHeaderButton", {
-    text: "tr->thead",
-    tooltip:
-      "Convert the current row to a header row and convert all cells to header cells",
-    onAction: function () {
-      editor.execCommand("makeCurrentRowHeader");
-    },
-  });
-
-  console.log("succesfully loaded makeCurrentRowHeader");
-}
-
-function makeCurrentCellHeader(editor) {
-  editor.addCommand("makeCurrentCellTh", function () {
-    const selection = editor.selection;
-    const selectedNode = selection.getNode();
-    const cell = editor.dom.getParent(selectedNode, "td");
-
-    const th = editor.dom.create("th", {}, cell.innerHTML);
-    cell.replaceWith(th);
-    editor.nodeChanged();
-  });
-  editor.ui.registry.addButton("makeCurrentCellHeaderButton", {
-    text: "td->th",
-    tooltip: "Convert the current cell to a header row",
-    onAction: function () {
-      editor.execCommand("makeCurrentCellTh");
-    },
-  });
-
-  console.log("succesfully loaded makeCurrentCellHeader");
-}
-
 // Register the command
 function registerFormatters(editor) {
   makeCurrentRowHeader(editor);
@@ -251,18 +138,12 @@ function registerFormatters(editor) {
 
   // Other formatter functions
   fixDomHierarchy(editor);
-  cleanInlineStyles(editor);
   unwrapParentElement(editor);
   getClassOfCurrentElement(editor);
-
 
   editor.addCommand("deleteCurrentElement", function () {
     deleteCurrentElement(editor);
   });
-
-
-
-
 
   // Add a toolbar button to delete the current element
   editor.ui.registry.addButton("deleteCurrentElementButton", {
@@ -288,14 +169,14 @@ function registerFormatters(editor) {
     getCurrentNode(editor);
   });
 
-    // Add a toolbar button to get the current node
-    editor.ui.registry.addButton("getCurrentNodeButton", {
-      text: "Get Node",
-      tooltip: "Get the current node",
-      onAction: function () {
-        editor.execCommand("getCurrentNode");
-      },
-    });
+  // Add a toolbar button to get the current node
+  editor.ui.registry.addButton("getCurrentNodeButton", {
+    text: "Get Node",
+    tooltip: "Get the current node",
+    onAction: function () {
+      editor.execCommand("getCurrentNode");
+    },
+  });
 }
 // Function to delete the closest div, p, or tr element where the cursor is currently placed
 function deleteCurrentElement(editor) {
@@ -335,32 +216,3 @@ function getCurrentNode(editor) {
   return selectedNode;
 }
 
-
-function moveTableRowUpDown(editor) {
-  editor.addCommand("moveTableRowUp", function () {
-    const row = editor.dom.getParent(getCurrentNode(editor), "tr");
-
-    if (row) {
-      const previousRow = row.previousElementSibling;
-      if (previousRow) {
-        row.parentNode.insertBefore(row, previousRow);
-      }
-    }
-  });
-
-  editor.ui.registry.addButton("moveTableRowUpButton", {
-    text: "⬆️",
-    tooltip: "Move the current row up",
-    onAction: function () {
-      editor.execCommand("moveTableRowUp");
-    },
-  });
-
-  editor.ui.registry.addButton("moveTableRowDownButton", {
-    text: "⬇️",
-    tooltip: "Move the current row down",
-    onAction: function () {
-      editor.execCommand("moveTableRowDown");
-    },
-  });
-}
