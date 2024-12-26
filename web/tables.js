@@ -27,8 +27,6 @@ function makeCurrentRowHeader(editor) {
       }
     }
   });
-
-  console.log("succesfully loaded makeCurrentRowHeader");
 }
 
 function makeCurrentCellHeader(editor) {
@@ -116,10 +114,6 @@ function moveColumnRight(editor) {
   editor.addShortcut("ctrl+alt+right", "Move column right", "moveColumnRight");
 }
 
-tinymce.PluginManager.add("moveColumnLeft", function (editor) {
-  moveColumnLeft(editor);
-  moveColumnRight(editor);
-});
 
 function moveRow(editor, direction) {
   const row = editor.dom.getParent(editor.selection.getNode(), "tr");
@@ -175,11 +169,6 @@ function moveRowDown(editor) {
 
   editor.addShortcut("ctrl+alt+down", "Move row down", "moveRowDown");
 }
-
-tinymce.PluginManager.add("moveRowUp", function (editor) {
-  moveRowUp(editor);
-  moveRowDown(editor);
-});
 
 function removeTableStyles(editor) {
   editor.addCommand("removeTableStyles", function () {
@@ -242,9 +231,9 @@ function addTableMenu(editor) {
             if (closestUl) {
               ulElement = editor.selection.select(closestUl);
               // Getting the currently selected node for the active editor
-            //   alert("UL element found.");
+              //   alert("UL element found.");
               const table = ulToTable(ulElement);
-            //   alert("Table created.");
+              //   alert("Table created.");
               editor.dom.insertAfter(table, ulElement);
               editor.selection.select(table); // Ensure the table is selected and visible
             } else {
@@ -354,10 +343,9 @@ function ulToTable(ulElement) {
 
   table.appendChild(thead);
   table.appendChild(tbody);
-//   alert("Table created");
+  //   alert("Table created");
   return table;
 }
-
 
 // Function to add custom commands and buttons
 function addCustomTableCommands(editor) {
@@ -366,51 +354,53 @@ function addCustomTableCommands(editor) {
     if (editor.queryCommandSupported(config.command)) {
       editor.ui.registry.addButton(name, {
         ...config,
-        onAction: config.onAction ? config.onAction : () => editor.execCommand(config.command),
+        onAction: config.onAction
+          ? config.onAction
+          : () => editor.execCommand(config.command),
       });
     }
   };
 
   // Register custom commands
-  editor.addCommand('moveColumnRight', function () {
-    moveColumn(editor, 'right');
+  editor.addCommand("moveColumnRight", function () {
+    moveColumn(editor, "right");
   });
 
-  editor.addCommand('moveColumnLeft', function () {
-    moveColumn(editor, 'left');
+  editor.addCommand("moveColumnLeft", function () {
+    moveColumn(editor, "left");
   });
 
-  editor.addCommand('moveRowUp', function () {
-    moveRow(editor, 'up');
+  editor.addCommand("moveRowUp", function () {
+    moveRow(editor, "up");
   });
 
-  editor.addCommand('moveRowDown', function () {
-    moveRow(editor, 'down');
+  editor.addCommand("moveRowDown", function () {
+    moveRow(editor, "down");
   });
 
   // Register buttons for the custom commands
-  registerButton('moveColumnRight', {
-    tooltip: 'Move Column Right',
-    command: 'moveColumnRight',
-    icon: 'arrow-right',
+  registerButton("moveColumnRight", {
+    tooltip: "Move Column Right",
+    command: "moveColumnRight",
+    icon: "arrow-right",
   });
 
-  registerButton('moveColumnLeft', {
-    tooltip: 'Move Column Left',
-    command: 'moveColumnLeft',
-    icon: 'arrow-left',
+  registerButton("moveColumnLeft", {
+    tooltip: "Move Column Left",
+    command: "moveColumnLeft",
+    icon: "arrow-left",
   });
 
-  registerButton('moveRowUp', {
-    tooltip: 'Move Row Up',
-    command: 'moveRowUp',
-    icon: 'action-prev',
+  registerButton("moveRowUp", {
+    tooltip: "Move Row Up",
+    command: "moveRowUp",
+    icon: "action-prev",
   });
 
-  registerButton('moveRowDown', {
-    tooltip: 'Move Row Down',
-    command: 'moveRowDown',
-    icon: 'action-next',
+  registerButton("moveRowDown", {
+    tooltip: "Move Row Down",
+    command: "moveRowDown",
+    icon: "action-next",
   });
 }
 
@@ -481,11 +471,27 @@ function moveRow(editor, direction) {
   editor.nodeChanged();
 }
 
-
-
 // Define additional toolbar items
-const additionalTableToolbarItems = ' | tablemergecells tablesplitcells | tablecellprops';
-const directionalTableToolbarItems = ' | moveColumnLeft moveRowUp moveRowDown moveColumnRight';
+const additionalTableToolbarItems =
+  " | tablemergecells tablesplitcells | tablecellprops";
+const directionalTableToolbarItems =
+  " | moveColumnLeft moveRowUp moveRowDown moveColumnRight";
 
 // Define the complete table_toolbar configuration
-const tableToolbarConfig = 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol' + additionalTableToolbarItems + directionalTableToolbarItems;
+const tableToolbarConfig =
+  "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol" +
+  additionalTableToolbarItems +
+  directionalTableToolbarItems;
+
+
+
+tinymce.PluginManager.add("enhancedTables", function (editor) {
+    moveColumnLeft(editor);
+    moveColumnRight(editor);
+    moveRowUp(editor);
+    moveRowDown(editor);
+    makeCurrentRowHeader(editor);
+    removeTableStyles(editor);
+    addTableMenu(editor);
+    addCustomTableCommands(editor);
+  });
