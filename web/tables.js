@@ -300,20 +300,19 @@ function addTableMenu(editor) {
 function ulToTable(ulElement) {
   if (ulElement.tagName !== "UL") {
     throw new Error("Element must be an unordered list");
-    alert("Element must be an unordered list");
   }
 
   const headers = [];
   const rows = [];
 
   // Extract headers and rows
-  ulElement.querySelectorAll(":scope > li").forEach((li, index) => {
+  ulElement.querySelectorAll(":scope > li").forEach((li) => {
     headers.push(li.firstChild.textContent.trim());
-    const row = [];
+    const nestedItems = [];
     li.querySelectorAll("ul > li").forEach((nestedLi) => {
-      row.push(nestedLi.textContent.trim());
+      nestedItems.push(nestedLi.textContent.trim());
     });
-    rows.push(row);
+    rows.push(nestedItems);
   });
 
   // Create table element
@@ -330,20 +329,22 @@ function ulToTable(ulElement) {
   });
   thead.appendChild(headerRow);
 
+  // Determine the maximum number of rows needed
+  const maxRows = Math.max(...rows.map(row => row.length));
+
   // Create body rows
-  rows.forEach((row) => {
+  for (let i = 0; i < maxRows; i++) {
     const tr = document.createElement("tr");
-    row.forEach((cell) => {
+    rows.forEach((row) => {
       const td = document.createElement("td");
-      td.textContent = cell;
+      td.textContent = row[i] || ""; // Fill empty cells if row[i] is undefined
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
-  });
+  }
 
   table.appendChild(thead);
   table.appendChild(tbody);
-  //   alert("Table created");
   return table;
 }
 
@@ -401,6 +402,17 @@ function addCustomTableCommands(editor) {
     tooltip: "Move Row Down",
     command: "moveRowDown",
     icon: "action-next",
+  });
+
+  registerButton("makeCurrentRowHeader", {
+    tooltip: "Make Row Header",
+    command: "makeCurrentRowHeader",
+    icon: "table-top-header",
+  });
+  registerButton("makeCurrentCellTh", {
+    tooltip: "Make Cell Header",
+    command: "makeCurrentCellTh",
+    icon: "table-top-header",
   });
 }
 
@@ -476,16 +488,16 @@ const additionalTableToolbarItems =
   " | tablemergecells tablesplitcells | tablecellprops";
 const directionalTableToolbarItems =
   " | moveColumnLeft moveRowUp moveRowDown moveColumnRight";
-
+const conversionTableToolbarItems = " | makeCurrentCellTh makeCurrentRowHeader";
 // Define the complete table_toolbar configuration
 const tableToolbarConfig =
   "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol" +
   additionalTableToolbarItems +
-  directionalTableToolbarItems;
+  directionalTableToolbarItems + conversionTableToolbarItems;
 
 
 
-tinymce.PluginManager.add("enhancedTables", function (editor) {
+tinymce.PluginManager.add("tablesEnhanced", function (editor) {
     moveColumnLeft(editor);
     moveColumnRight(editor);
     moveRowUp(editor);
