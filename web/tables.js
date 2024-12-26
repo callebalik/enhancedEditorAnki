@@ -358,16 +358,134 @@ function ulToTable(ulElement) {
   return table;
 }
 
-// Define additional toolbar items
-const additionalTableToolbarItems = ' | tablemergecells tablesplitcells | tablecellprops | moveColumnRight';
 
-// Define the complete table_toolbar configuration
-const tableToolbarConfig = 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol' + additionalTableToolbarItems;
-
-// Example function to add a custom command
+// Function to add custom commands and buttons
 function addCustomTableCommands(editor) {
-  editor.addCommand('customTableCommand', function () {
-    // Custom command logic here
-    console.log('Custom table command executed');
+  // Define a helper function to register buttons
+  const registerButton = (name, config) => {
+    if (editor.queryCommandSupported(config.command)) {
+      editor.ui.registry.addButton(name, {
+        ...config,
+        onAction: config.onAction ? config.onAction : () => editor.execCommand(config.command),
+      });
+    }
+  };
+
+  // Register custom commands
+  editor.addCommand('moveColumnRight', function () {
+    moveColumn(editor, 'right');
+  });
+
+  editor.addCommand('moveColumnLeft', function () {
+    moveColumn(editor, 'left');
+  });
+
+  editor.addCommand('moveRowUp', function () {
+    moveRow(editor, 'up');
+  });
+
+  editor.addCommand('moveRowDown', function () {
+    moveRow(editor, 'down');
+  });
+
+  // Register buttons for the custom commands
+  registerButton('moveColumnRight', {
+    tooltip: 'Move Column Right',
+    command: 'moveColumnRight',
+    icon: 'arrow-right',
+  });
+
+  registerButton('moveColumnLeft', {
+    tooltip: 'Move Column Left',
+    command: 'moveColumnLeft',
+    icon: 'arrow-left',
+  });
+
+  registerButton('moveRowUp', {
+    tooltip: 'Move Row Up',
+    command: 'moveRowUp',
+    icon: 'action-prev',
+  });
+
+  registerButton('moveRowDown', {
+    tooltip: 'Move Row Down',
+    command: 'moveRowDown',
+    icon: 'action-next',
   });
 }
+
+// Function to move columns
+function moveColumn(editor, direction) {
+  const cell = editor.dom.getParent(editor.selection.getNode(), "td,th");
+  if (!cell) return;
+
+  const row = cell.parentNode;
+  const table = editor.dom.getParent(row, "table");
+  if (!table) return;
+
+  const cellIndex = cell.cellIndex;
+  if (direction === "left" && cellIndex === 0) return; // Already at the first column
+  if (direction === "right" && cellIndex === row.cells.length - 1) return; // Already at the last column
+
+  Array.from(table.rows).forEach((row) => {
+    const cells = Array.from(row.cells);
+    const currentCell = cells[cellIndex];
+    const targetCell =
+      direction === "left" ? cells[cellIndex - 1] : cells[cellIndex + 1];
+    row.insertBefore(
+      currentCell,
+      direction === "left" ? targetCell : targetCell.nextSibling
+    );
+  });
+
+  editor.nodeChanged();
+}
+
+// Function to move rows
+function moveRow(editor, direction) {
+  const row = editor.dom.getParent(editor.selection.getNode(), "tr");
+  if (!row) return;
+
+  const table = editor.dom.getParent(row, "table");
+  if (!table) return;
+
+  const tbody = table.querySelector("tbody") || table;
+  const thead = table.querySelector("thead");
+
+  if (direction === "up") {
+    const previousRow = row.previousElementSibling;
+    if (previousRow) {
+      row.parentNode.insertBefore(row, previousRow);
+    } else if (row.parentNode === tbody && thead) {
+      // Move to thead
+      thead.appendChild(row);
+      Array.from(row.cells).forEach((cell) => {
+        const th = editor.dom.create("th", {}, cell.innerHTML);
+        row.replaceChild(th, cell);
+      });
+    }
+  } else if (direction === "down") {
+    const nextRow = row.nextElementSibling;
+    if (nextRow) {
+      row.parentNode.insertBefore(nextRow, row);
+    } else if (row.parentNode === thead) {
+      // Move to tbody
+      tbody.appendChild(row);
+      Array.from(row.cells).forEach((cell) => {
+        const td = editor.dom.create("td", {}, cell.innerHTML);
+        row.replaceChild(td, cell);
+      });
+    }
+  }
+
+  editor.nodeChanged();
+}
+
+
+
+// Define additional toolbar items
+const additionalTableToolbarItems = ' | tablemergecells tablesplitcells | tablecellprops';
+const directionalTableToolbarItems = ' | moveColumnLeft moveRowUp moveRowDown moveColumnRight';
+
+// Define the complete table_toolbar configuration
+const tableToolbarConfig = 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol' + additionalTableToolbarItems + directionalTableToolbarItems;
