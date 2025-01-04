@@ -13,105 +13,123 @@
 <script src="_addons/805891399/web/clozes.js"></script>
 <script src="_addons/805891399/web/formatter.js"></script>
 <script src="_addons/805891399/web/sourceCode.js"></script>
+<script src="_addons/805891399/web/menu.js"></script>
+<script src="_addons/805891399/web/manipulators.js"></script> <!-- Load the manipulators script -->
 <script src="_addons/805891399/web/tables.js"></script>
+<script src="_addons/805891399/web/lists.js"></script>
 <script src="_addons/805891399/web/text-patterns.js"></script>
 <script>
 
+    var myfontsize = "%(FONTSIZE)s";
+    // Define a global flag for save state
+    let saving = false;
 
-        tinymce.init({
-    skin: "%(SKIN)s",
-    theme: "%(THEME)s",
-    selector: '.tinymce6_wysiwyg',
-    auto_focus: 'tinymce6_wysiwyg_unique',
-    document_base_url: '../../../../../../',
-    body_class: 'bodyclass',
-    content_css: [%(CONTENTCSS)s],
-    formats: {
-        bold: { inline: 'b' },
-        italic: { inline: 'i' },
-        underline: { inline: 'u' }
-    },
-    force_br_newlines: false,
-    convert_newlines_to_brs: false,
-    forced_root_block: 'div',
-    extended_valid_elements: 'u,b,i',
-    autoresize: false,
-    table_use_colgroups: false,
-//     table_default_styles: {
-//     width: '50vw'
-//   },
-//   table_sizing_mode: 'fixed',
+    tinymce.init({
+        skin: "%(SKIN)s",
+        theme: "%(THEME)s",
+        selector: '.tinymce6_wysiwyg',
+        auto_focus: 'tinymce6_wysiwyg_unique',
+        document_base_url: '../../../../../../',
+        body_class: 'bodyclass',
+        content_css: [%(CONTENTCSS)s],
+        formats: {
+            bold: { inline: 'b' },
+            italic: { inline: 'i' },
+            underline: { inline: 'u' }
+        },
+        force_br_newlines: false,
+        convert_newlines_to_brs: false,
+        forced_root_block: 'div',
+        extended_valid_elements: 'u,b,i',
+        autoresize: false,
+        table_use_colgroups: false,
+        //     table_default_styles: {
+        //     width: '50vw'
+        //   },
+        //   table_sizing_mode: 'fixed',
 
-    invalid_styles: {
-        '*': 'width',
-        '*': 'text-align'
+        invalid_styles: {
+            '*': 'width',
+            '*': 'text-align'
         },
 
         plugins: [
             "advlist", "anchor", "accordion", "autolink", "charmap", "code", "codesample", "directionality",
             "emoticons", "fullscreen", "help", "insertdatetime", "link", "lists", "media",
-            "nonbreaking", "searchreplace", "table", "visualblocks", "visualchars", "wordcount", "enhancedTables"
+            "nonbreaking", "searchreplace", "table", "visualblocks", "visualchars", "wordcount", "tablesEnhanced", "listsEnhanced"
         ],
+        text_patterns: text_patterns,
+        toolbar1: '%(TOOLBAR1)s | addListItem fixDomHierarchyButton unwrapParent removeClozeHighlighting moveItemDown getClassOfCurrentElement makeCurrentCellHeaderButton deleteCurrentElementButton getCurrentNodeButton',  // Add addListItem button
+        toolbar2: '%(TOOLBAR2)s | mybutton TablesMenu',
+        statusbar: false,
+        promotion: false,
+        menubar: 'edit view insert format tools table help media image',
+        removed_menuitems: 'file print',
+        contextmenu: "link inserttable | cell row column deletetable | list | image",
         table_toolbar: tableToolbarConfig,
+        setup: function (editor) {
+
+            editor.on('init', function () {
+                this.getDoc().body.style.fontSize = `${myfontsize.toString()}px`;
+                this.getDoc().body.style.fontFamily = '%(FONTNAME)s';
             %(CUSTOMBGCOLOR)s
-            editor.execCommand('mceFullScreen');
-            editor.execCommand('mceVisualBlocks');
-            applyClozeHighlighting(editor);
-        });
+                editor.execCommand('mceFullScreen');
+                editor.execCommand('mceVisualBlocks');
+                applyClozeHighlighting(editor);
+            });
 
-            moveColumnLeft(editor);
-            moveColumnRight(editor);
-            moveRowUp(editor);
-            moveRowDown(editor);
-            removeTableStyles(editor);
-            addTableMenu(editor);
 
-            // Add custom table commands
-            addCustomTableCommands(editor)
 
-            // Add a button to invoke the custom command
-            editor.ui.registry.addButton('customTableButton', {
-                text: 'Custom Table Command',
-                onAction: function () {
-                    editor.execCommand('customTableCommand');
+
+            // Load external scripts
+            sourceCodeMain(editor);
+            registerFormatters(editor);
+            clozesMain(editor);
+            shortcutsMain(editor);
+
+            editor.on('dblclick', function (e) {
+                const selection = editor.selection;
+                const rng = selection.getRng();
+
+                // Check if selection includes trailing whitespace
+                const selectedText = selection.getContent({ format: 'text' });
+                if (/\s$/.test(selectedText)) {
+                    // Adjust the range to exclude trailing whitespace
+                    rng.setEnd(rng.endContainer, rng.endOffset - 1);
+                    selection.setRng(rng);
                 }
             });
 
-            // Check if selection includes trailing whitespace
-            const selectedText = selection.getContent({ format: 'text' });
-            if (/\s$/.test(selectedText)) {
-                // Adjust the range to exclude trailing whitespace
-                rng.setEnd(rng.endContainer, rng.endOffset - 1);
-                selection.setRng(rng);
-            }
-        });
+            // On editor close
+            editor.on('getContent', function (e) {
+                if (saving) {
+                    console.log("Closing editor")
+                    e.content = removeClozeHighlighting(e.content);
+                    // Reset the flag to ensure processing occurs only once per save
+                    saving = false;
+                }
+            });
 
-        // On editor close
-        editor.on('getContent', function (e) {
-            if (saving) {
-                console.log("Closing editor")
-                e.content = removeClozeHighlighting(e.content);
-                // Reset the flag to ensure processing occurs only once per save
-                saving = false;
-            }
-        });
+            editor.addCommand('removeClozeHighlighting', function () {
+                console.log("removeClozeHighlighting");
+                let content = editor.getContent({ format: "html" });
+                content = removeClozeHighlighting(content);
+            });
 
-        editor.addCommand('removeClozeHighlighting', function () {
-            console.log("removeClozeHighlighting");
-            let content = editor.getContent({ format: "html" });
-            content = removeClozeHighlighting(content);
-        });
+            editor.addShortcut('ctrl+shift+r', 'Remove cloze highlighting', 'removeClozeHighlighting');
+            editor.ui.registry.addButton("removeClozeHighlighting", {
+                text: "RCH",
+                tooltip: "removeClozeHighlighting" + "(" + "ctrl+shift+r" + ")",
+                onAction: () => {
+                    editor.execCommand("removeClozeHighlighting");
+                },
+            });
 
-        editor.addShortcut('ctrl+shift+r', 'Remove cloze highlighting', 'removeClozeHighlighting');
-        editor.ui.registry.addButton("removeClozeHighlighting", {
-            text: "RCH",
-            tooltip: "removeClozeHighlighting" + "(" + "ctrl+shift+r" + ")",
-            onAction: () => {
-                editor.execCommand("removeClozeHighlighting");
-            },
-        });
-    }
-});
+        }
+    });
 </script>
 
-<div class="tinymce6_wysiwyg" id="tinymce6_wysiwyg_unique">CONTENTCONTENT</div>
+<div
+    class="tinymce6_wysiwyg"
+    id="tinymce6_wysiwyg_unique"
+>CONTENTCONTENT</div>
