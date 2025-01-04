@@ -15,8 +15,9 @@ function addMenu(editor) {
               text: "Element prop",
               icon: "code-sample",
               onAction: function () {
+                const selectedNode = editor.selection.getNode();
 
-                editor.windowManager.open(createDialogConfig());
+                editor.windowManager.open(createDialogConfig(selectedNode));
               },
             },
             {
