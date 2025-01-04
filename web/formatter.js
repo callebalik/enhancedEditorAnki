@@ -133,9 +133,9 @@ function getClassOfCurrentElement(editor) {
 
 // Register the command
 function registerFormatters(editor) {
+
   makeCurrentRowHeader(editor);
   makeCurrentCellHeader(editor);
-
   // Other formatter functions
   fixDomHierarchy(editor);
   unwrapParentElement(editor);
@@ -160,10 +160,6 @@ function registerFormatters(editor) {
     "deleteCurrentElement",
     "deleteCurrentElement"
   );
-
-  moveTableRowUpDown(editor);
-
-  editor.addShortcut("ctrl+alt+down", "moveTableRowDown", "moveTableRowDown");
 
   editor.addCommand("getCurrentNode", function () {
     getCurrentNode(editor);
