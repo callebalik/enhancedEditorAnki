@@ -31,7 +31,7 @@ function createDialogConfig(selectedNode) {
             type: 'button',
             name: 'parentElement',
             text: `Go to Parent Element <${parentTagName}>`,
-            enabled: true,
+            enabled: selectedNode.parentNode && selectedNode.parentNode.tagName.toLowerCase() !== 'body' && selectedNode.parentNode.tagName.toLowerCase() !== 'html',
             primary: false
           },
           {
@@ -67,7 +67,6 @@ function createDialogConfig(selectedNode) {
       },
       onSubmit: function (api) {
         const data = api.getData();
-        const selectedNode = tinymce.activeEditor.selection.getNode();
 
         // Update class
         if (data.class) {
@@ -94,18 +93,15 @@ function createDialogConfig(selectedNode) {
   }
 
   function getInitialData(selectedNode) {
-    const className = selectedNode.className || '';
-    const style = selectedNode.style.cssText || '';
-    const attributes = Array.from(selectedNode.attributes)
-      .filter(attr => attr.name !== 'class' && attr.name !== 'style')
-      .map(attr => `${attr.name}=${attr.value}`)
-      .join(',');
-    const parentElement = selectedNode.parentNode;
-
     return {
-      class: className,
-      style: style,
-      attributes: attributes
+      selectedNode: selectedNode,
+      parentNode: selectedNode.parentNode,
+      class: selectedNode.className || '',
+      style: selectedNode.style.cssText || '',
+      attributes: Array.from(selectedNode.attributes)
+        .filter(attr => attr.name !== 'class' && attr.name !== 'style')
+        .map(attr => `${attr.name}=${attr.value}`)
+        .join(',')
     };
   }
 
