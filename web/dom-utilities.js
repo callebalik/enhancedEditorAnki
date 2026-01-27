@@ -59,28 +59,64 @@ function addMenu(editor) {
             {
               type: "menuitem",
               text: "remove line breaks from selection",
-              onAction: () =>
-                editor.insertContent(
-                  editor.selection.getContent().replace(/<br\s*\/?>/gi, " ")
-                ),
+              onAction: () => {
+                const selectedContent = editor.selection.getContent({
+                  format: "html",
+                });
+                const strippedContent = selectedContent.replace(
+                  /font-size:\s*[^;]+;?/gi,
+                  ""
+                );
+                const container = editor.selection.getNode();
+                container.innerHTML = container.innerHTML.replace(
+                  selectedContent,
+                  strippedContent
+                );
+              },
             },
             {
               type: "menuitem",
-              text: "Sub menu item 1",
-              icon: "unlock",
-              onAction: () =>
-                editor.insertContent(
-                  "&nbsp;<em>You clicked Sub menu item 1!</em>"
-                ),
+              text: "Strip font-size from selection",
+              icon: "remove",
+              onAction: () => {
+                const selectedContent = editor.selection.getContent({
+                  format: "html",
+                });
+                const strippedContent = selectedContent.replace(
+                  /font-size:\s*[^;]+;?/gi,
+                  ""
+                );
+                const container = editor.selection.getNode();
+                container.innerHTML = container.innerHTML.replace(
+                  selectedContent,
+                  strippedContent
+                );
+              },
             },
             {
               type: "menuitem",
-              text: "Sub menu item 2",
+              text: "Unnest headings",
               icon: "lock",
-              onAction: () =>
-                editor.insertContent(
-                  "&nbsp;<em>You clicked Sub menu item 2!</em>"
-                ),
+              onAction: () => {
+                unnestHeadings(editor);
+              },
+            },
+            {
+              type: "menuitem",
+              text: "Unwrap element",
+              icon: "lock",
+              onAction: () => {
+                const node = editor.selection.getNode();
+                unwrapElement(editor, node);
+              },
+            },
+            {
+              type: "menuitem",
+              text: "Find redundant divs",
+              icon: "lock",
+              onAction: () => {
+                findRedundantDivs(editor);
+              },
             },
           ],
         },
@@ -103,5 +139,48 @@ function addMenu(editor) {
       ];
       callback(items);
     },
+  });
+}
+
+// Function to unnest headings and move them to the top level
+function unnestHeadings(editor) {
+  const headings = editor.dom.select("h1, h2, h3, h4, h5, h6");
+  headings.forEach((heading) => {
+    let parent = heading.parentNode;
+    while (parent && parent !== editor.getBody()) {
+      const grandParent = parent.parentNode;
+      grandParent.insertBefore(heading, parent);
+      parent = grandParent;
+    }
+  });
+}
+
+function unwrapElement(editor, element) {
+  const parent = element.parentNode;
+  while (element.firstChild) {
+    parent.insertBefore(element.firstChild, element);
+  }
+  parent.removeChild(element);
+}
+
+function findRedundantDivs(editor) {
+  const divs = editor.dom.select("div");
+  divs.forEach((div) => {
+    // If no attributes and only containing a div, ul or ol element, unwrap
+    if (div.attributes.length === 0 && div.children.length === 1) {
+      const child = div.children[0];
+      if (
+        child.tagName === "DIV" ||
+        child.tagName === "UL" ||
+        child.tagName === "OL"
+      ) {
+        unwrapElement(editor, div);
+      }
+    }
+
+    // After unwrapping divs remove previously empty and newly empty divs
+    if (div.innerHTML === "") {
+      div.remove();
+    }
   });
 }
