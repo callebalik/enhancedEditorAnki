@@ -5,18 +5,10 @@ from anki.errors import NotFoundError
 from anki.notes import NoteId
 from aqt import gui_hooks, mw
 from aqt.operations.note import update_note
-from aqt.qt import (
-    QAction,
-    QCloseEvent,
-    QKeySequence,
-    QMainWindow,
-    QMessageBox,
-    QShortcut,
-    Qt,
-    QToolBar,
-    QVBoxLayout,
-    QWidget,
-)
+from aqt.qt import (QAction, QDialog, QDialogButtonBox, QHBoxLayout,
+                    QKeySequence, QMainWindow, QMenuBar, QMetaObject,
+                    QPushButton, QShortcut, Qt, QToolBar, QVBoxLayout,
+                    QWebEngineView)
 from aqt.utils import askUser, restoreGeom, saveGeom, tooltip
 
 from .helpers import post_process_html, window_geometry_key
@@ -45,12 +37,20 @@ class ExtraWysiwygEditorForField(QMainWindow):
         content_surrounded_with_div: bool,
         web_path: str,
     ):
-        # Use Qt.WindowType.Window for proper standalone window behavior (like EditCurrent)
-        super().__init__(None, Qt.WindowType.Window)
+        # Create dialog with mw as parent (not editor.widget) to avoid forced modal behavior
+        super(ExtraWysiwygEditorForField, self).__init__(mw)
 
-        self.note_id = note_id
-        self.field_idx = field_idx
-        self.original_html = original_html
+        if anki_point_version <= 44:
+            mw.setupDialogGC(self)
+        else:
+            mw.garbage_collect_on_dialog_finish(self)
+
+        # Make dialog a floating tool window (non-modal, independent)
+        from aqt.qt import Qt
+
+        self.setWindowModality(Qt.WindowModality.NonModal)
+        self.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.Tool)
+
         self.js_file = js_file
         self.content_surrounded_with_div = content_surrounded_with_div
         self.web_path = web_path
@@ -66,12 +66,11 @@ class ExtraWysiwygEditorForField(QMainWindow):
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-        central_widget.setLayout(main_layout)
+        self.setLayout(main_layout)
 
-        # Toolbar with actions
-        self._setup_toolbar()
+        # Add debug menu
+        self.setupDebugMenu(main_layout)
 
-        # WebView
         self.web = MyWebView(self, self.web_path, self.js_file)
         self.web.allowDrops = True
         self.web.title = dialogname
@@ -316,49 +315,102 @@ class ExtraWysiwygEditorForField(QMainWindow):
                 return
         self.web.reload()
 
-    def reload_template(self):
-        """Development helper: Reload template file without Anki restart."""
-        import sys
-        from importlib import reload
+    def maximize_window(self):
+        self.showMaximized()
 
-        if self._is_dirty():
-            ok = askUser("You have unsaved changes. Reload template anyway?")
-            if not ok:
-                return
+    def setupDebugMenu(self, layout):
+        """Add debug menu bar with DevTools option"""
+        menubar = QMenuBar(self)
+        layout.setMenuBar(menubar)
+
+        debug_menu = menubar.addMenu("&Debug")
+
+        # Inspect/DevTools action
+        inspect_action = QAction("&Inspect WebView (DevTools)", self)
+        inspect_action.setShortcut(QKeySequence("F12"))
+        inspect_action.triggered.connect(self.openDevTools)
+        debug_menu.addAction(inspect_action)
+
+        # Console log action
+        console_action = QAction("Show &Console Logs", self)
+        console_action.triggered.connect(self.showConsoleLogs)
+        debug_menu.addAction(console_action)
+
+        debug_menu.addSeparator()
+
+        # Reload addon action
+        reload_action = QAction("&Reload Addon (All Files)", self)
+        reload_action.setShortcut(QKeySequence("Ctrl+Shift+R"))
+        reload_action.triggered.connect(self.reloadAddon)
+        debug_menu.addAction(reload_action)
+
+        # Reload webview action (for quick JS/CSS testing)
+        reload_web_action = QAction("Reload &Webview (JS/CSS only)", self)
+        reload_web_action.setShortcut(QKeySequence("Ctrl+R"))
+        reload_web_action.triggered.connect(self.reloadWebview)
+        debug_menu.addAction(reload_web_action)
+
+    def openDevTools(self):
+        """Open Chrome DevTools for the webview"""
+        try:
+            # Close existing DevTools window if open
+            if hasattr(self, "devtools_window") and self.devtools_window:
+                self.devtools_window.close()
+                self.devtools_window = None
+
+            # Create a proper QMainWindow for DevTools
+            self.devtools_window = QMainWindow()
+            self.devtools_window.setWindowTitle("DevTools - Enhanced Editor")
+            self.devtools_window.resize(1200, 800)
+            self.devtools_window.setWindowFlags(Qt.WindowType.Window)
+
+            # Create webview inside the window
+            devtools_view = QWebEngineView()
+            self.devtools_window.setCentralWidget(devtools_view)
+
+            # Set inspected page
+            devtools_view.page().setInspectedPage(self.web.page())
+
+            # Show the window
+            self.devtools_window.show()
+            self.devtools_window.raise_()
+            self.devtools_window.activateWindow()
+
+        except Exception as e:
+            print(f"Error opening DevTools: {e}")
+            print("Tip: Try right-clicking in the editor and select 'Inspect'")
+
+    def showConsoleLogs(self):
+        """Show a reminder about console logs"""
+        from aqt.utils import showInfo
+
+        showInfo(
+            "To view console logs:\n\n"
+            "1. Right-click in editor → 'Inspect'\n"
+            "2. Or press F12\n"
+            "3. Click 'Console' tab\n\n"
+            "Look for '[Bracket Matching]' messages to debug the plugin.",
+            parent=self,
+            title="Console Logs",
+        )
+
+    def reloadAddon(self):
+        """Reload the entire addon (Python + JS + CSS)"""
+        from aqt.utils import showInfo, tooltip
 
         try:
-            # Force reload of external_js_editor_for_field module
-            module_name = None
-            for name in sys.modules:
-                if "external_js_editor_for_field" in name:
-                    module_name = name
-                    break
-            if module_name:
-                reload(sys.modules[module_name])
-
-            from .external_js_editor_for_field import get_settings
-
-            settings = get_settings("T6")
-
-            # Get current content before reload
-            current_content = self.web.sync_execJavaScript(
-                "tinymce.activeEditor ? tinymce.activeEditor.getContent() : ''"
+            tooltip("Reloading Enhanced Editor addon...", parent=self)
+            mw.addonManager.reload("805891399")
+            showInfo(
+                "Addon reloaded successfully!\n\nClose and reopen the editor to see changes.",
+                parent=self,
             )
-
-            # Rebuild HTML with fresh template
-            new_body = settings["body_except_for_field_content"].replace(
-                "CONTENTCONTENT", current_content
-            )
-
-            # Reload webview with new HTML
-            self.web.stdHtml(
-                body=new_body,
-                css=cssfiles,
-                js=[self.js_file] + other_jsfiles,
-                head="",
-                context=self,
-            )
-
-            tooltip("Template reloaded successfully!")
         except Exception as e:
-            tooltip(f"Error reloading template: {str(e)}")
+            showInfo(f"Error reloading addon:\n\n{str(e)}", parent=self)
+
+    def reloadWebview(self):
+        """Reload the webview (useful for quick JS/CSS testing)"""
+        from aqt.utils import tooltip
+
+        tooltip("Reloading webview...", parent=self)
+        self.web.reload()

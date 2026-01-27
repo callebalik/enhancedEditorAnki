@@ -10,6 +10,7 @@ from aqt.qt import (
     QEvent,
     QNativeGestureEvent,
     Qt,
+    QWebEngineSettings,
     QWebEngineView,
 )
 from aqt.webview import AnkiWebView
@@ -26,6 +27,30 @@ class MyWebView(AnkiWebView):
         super().__init__(parent)
         self.web_path = web_path
         self.editor_js_file = editor_js_file
+
+        # Enable developer tools for debugging (with version compatibility)
+        try:
+            settings = self.settings()
+            # Try the new PyQt6 way first
+            try:
+                settings.setAttribute(
+                    QWebEngineSettings.WebAttribute.DeveloperExtrasEnabled, True
+                )
+            except AttributeError:
+                # Fallback for older/different PyQt versions - use integer value
+                # 32 is the enum value for DeveloperExtrasEnabled in most versions
+                settings.setAttribute(32, True)
+        except Exception as e:
+            print(f"Warning: Could not enable developer tools: {e}")
+
+        # Enable right-click context menu for inspect option
+        try:
+            self.setContextMenuPolicy(Qt.ContextMenuPolicy.DefaultContextMenu)
+        except AttributeError:
+            # Fallback for different enum structure
+            from aqt.qt import QContextMenuPolicy
+
+            self.setContextMenuPolicy(QContextMenuPolicy.DefaultContextMenu)
 
     def sync_execJavaScript(self, script):
         return sync_execJavaScript(self, script)
