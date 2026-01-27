@@ -55,11 +55,12 @@
         },
 
         plugins: [
-            "advlist", "anchor", "accordion", "autolink", "charmap", "code", "codesample", "directionality",
+            "advlist", "anchor", "accordion", "autolink", "autosave", "charmap", "code", "codesample", "directionality",
             "emoticons", "fullscreen", "help", "insertdatetime", "link", "lists", "media",
             "nonbreaking", "searchreplace", "table", "visualblocks", "visualchars", "wordcount", "tablesEnhanced"
-        ],
-        text_patterns: text_patterns,
+        ],        autosave_ask_before_unload: true,
+        autosave_interval: "30s",
+        autosave_restore_when_empty: false,        text_patterns: text_patterns,
         toolbar1: '%(TOOLBAR1)s | addListItem fixDomHierarchyButton unwrapParent removeClozeHighlighting moveItemDown getClassOfCurrentElement makeCurrentCellHeaderButton deleteCurrentElementButton getCurrentNodeButton',  // Add addListItem button
         toolbar2: '%(TOOLBAR2)s | mybutton TablesMenu',
         statusbar: false,
@@ -124,6 +125,19 @@
                 onAction: () => {
                     editor.execCommand("removeClozeHighlighting");
                 },
+            });
+
+            // Add reload editor menu item
+            editor.ui.registry.addMenuItem('reloadeditor', {
+                text: 'Reload Editor',
+                icon: 'reload',
+                onAction: function () {
+                    if (editor.isDirty()) {
+                        alert('You have unsaved changes. Please save or cancel first, then use the Reload button.');
+                    } else {
+                        alert('Please use the Reload button at the bottom of the editor.');
+                    }
+                }
             });
 
             addMenu(editor);

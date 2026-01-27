@@ -5,12 +5,12 @@ if anki_point_version >= 50:
 else:
     from anki.utils import isLin
 
-from aqt import mw
+from aqt import QMessageBox, mw
 from aqt.qt import (
     QEvent,
-    QWebEngineView,
     QNativeGestureEvent,
     Qt,
+    QWebEngineView,
 )
 from aqt.webview import AnkiWebView
 

@@ -67,11 +67,17 @@ class ExtraWysiwygEditorForField(QDialog):
         )
         main_layout.addWidget(self.buttonBox)
 
-        # Add a maximize button
+        # Add maximize, reload webview, and reload backend buttons
         maximize_button = QPushButton("Maximize")
         maximize_button.clicked.connect(self.maximize_window)
+        reload_webview_button = QPushButton("Reload Webview")
+        reload_webview_button.clicked.connect(self.reload_webview)
+        reload_backend_button = QPushButton("Reload Backend")
+        reload_backend_button.clicked.connect(self.reload_backend)
         button_layout = QHBoxLayout()
         button_layout.addWidget(maximize_button)
+        button_layout.addWidget(reload_webview_button)
+        button_layout.addWidget(reload_backend_button)
         main_layout.addLayout(button_layout)
 
         # Add a shortcut for maximizing the window
@@ -127,3 +133,26 @@ class ExtraWysiwygEditorForField(QDialog):
 
     def maximize_window(self):
         self.showMaximized()
+
+    def reload_webview(self):
+        # Check if TinyMCE has unsaved changes
+        is_dirty = self.web.sync_execJavaScript(
+            "tinymce.activeEditor ? tinymce.activeEditor.isDirty() : false"
+        )
+
+        if is_dirty:
+            ok = askUser(
+                "You have unsaved changes. Are you sure you want to reload the webview?"
+            )
+            if not ok:
+                return
+
+        # Reload the webview
+        self.web.reload()
+
+    def reload_backend(self):
+        from aqt.utils import tooltip
+
+        tooltip(
+            "Backend changes require an Anki restart. Please close this dialog and restart Anki."
+        )
