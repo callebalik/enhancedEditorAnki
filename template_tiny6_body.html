@@ -78,7 +78,7 @@
             },
             dom: {
                 title: 'DOM',
-                items: 'editElementProperties sendCurrentNodeToConsole | addClassToElement | removeEmptyElements | unnestHeadings unwrapElement findRedundantDivs | fixDomHierarchyItem deleteCurrentElementItem'
+                items: 'editElementProperties sendCurrentNodeToConsole | addClassToElement | removeEmptyElements | unnestHeadings wrapElement unwrapElement findRedundantDivs | fixDomHierarchyItem deleteCurrentElementItem'
             }
         },
         contextmenu: "link inserttable | cell row column deletetable | list | image",
@@ -283,6 +283,51 @@
                 shortcut: "Meta+Shift+U",
                 icon: "lock",
                 onAction: () => editor.execCommand("unwrapCurrentElement")
+            });
+
+            editor.addCommand("wrapCurrentElement", function () {
+                editor.windowManager.open({
+                    title: "Wrap Element",
+                    body: {
+                        type: "panel",
+                        items: [
+                            {
+                                type: "input",
+                                name: "tagName",
+                                label: "Tag name"
+                            }
+                        ]
+                    },
+                    buttons: [
+                        {
+                            type: "cancel",
+                            text: "Cancel"
+                        },
+                        {
+                            type: "submit",
+                            text: "Wrap",
+                            primary: true
+                        }
+                    ],
+                    onSubmit: (api) => {
+                        const data = api.getData();
+                        const tagName = data.tagName.trim();
+                        if (tagName) {
+                            const node = editor.selection.getNode();
+                            wrapElement(editor, node, tagName);
+                        }
+                        api.close();
+                    }
+                });
+            });
+
+            editor.addShortcut("meta+shift+w", "wrapCurrentElement", "wrapCurrentElement");
+
+            editor.ui.registry.addMenuItem("wrapElement", {
+                text: "Wrap element",
+                shortcut: "Meta+Shift+W",
+                icon: "lock",
+                onAction: () => editor.execCommand("wrapCurrentElement")
             });
 
             editor.ui.registry.addMenuItem("findRedundantDivs", {

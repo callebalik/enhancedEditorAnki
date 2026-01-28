@@ -27,6 +27,36 @@ function unwrapElement(editor, element) {
   parent.removeChild(element);
 }
 
+function wrapElement(editor, element, tagName) {
+  // IMPORTANT NOTE ON HTML TAG VALIDATION:
+  // TinyMCE enforces a schema-based validation system that restricts which HTML tags can be used.
+  // By default, only standard HTML5 tags are allowed in the editor.
+  //
+  // When you try to type or insert non-standard tags (like <custom-tag>):
+  // 1. TinyMCE's schema validator will strip them out during content processing
+  // 2. The editor will either remove the tag entirely or convert it to a valid tag
+  // 3. This happens automatically through TinyMCE's internal sanitization
+  //
+  // To allow custom/non-standard tags, you must configure the schema in tinymce.init():
+  // - Use 'extended_valid_elements' to add specific custom tags
+  // - Use 'custom_elements' to define custom element patterns
+  // - Use 'valid_elements' to completely override the whitelist (not recommended)
+  //
+  // Example configuration:
+  // extended_valid_elements: 'custom-tag[*],my-element[class|id|data-*]'
+  //
+  // Without this configuration, functions like wrapElement() will only work with standard HTML tags.
+
+  // Note: This function will only work if tagName is a valid HTML element
+  // or has been added to TinyMCE's schema via extended_valid_elements
+  if (element && tagName) {
+    const wrapper = editor.dom.create(tagName);
+    element.parentNode.insertBefore(wrapper, element);
+    wrapper.appendChild(element);
+    editor.nodeChanged();
+  }
+}
+
 function findRedundantDivs(editor) {
   const divs = editor.dom.select("div");
   divs.forEach((div) => {
