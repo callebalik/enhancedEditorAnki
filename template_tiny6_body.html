@@ -205,6 +205,14 @@
             });
             console.log("[DEBUG] convertUlToTable menuItem registered");
 
+            console.log("[DEBUG] Registering convertToList menuItem");
+            editor.ui.registry.addMenuItem("convertToList", {
+                text: "Divs→List (convert text-numbered divs to proper HTML list)",
+                icon: "ordered-list",
+                onAction: () => editor.execCommand("convertToList")
+            });
+            console.log("[DEBUG] convertToList menuItem registered");
+
             // Register DOM menu items
             console.log("[DEBUG] Registering DOM menu items");
 
