@@ -271,13 +271,18 @@
                 onAction: () => unnestHeadings(editor)
             });
 
+            editor.addCommand("unwrapCurrentElement", function () {
+                const node = editor.selection.getNode();
+                unwrapElement(editor, node);
+            });
+
+            editor.addShortcut("meta+shift+u", "unwrapCurrentElement", "unwrapCurrentElement");
+
             editor.ui.registry.addMenuItem("unwrapElement", {
                 text: "Unwrap element",
+                shortcut: "Meta+Shift+U",
                 icon: "lock",
-                onAction: () => {
-                    const node = editor.selection.getNode();
-                    unwrapElement(editor, node);
-                }
+                onAction: () => editor.execCommand("unwrapCurrentElement")
             });
 
             editor.ui.registry.addMenuItem("findRedundantDivs", {
