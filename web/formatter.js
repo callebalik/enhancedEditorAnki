@@ -17,11 +17,11 @@ function unwrapParentElement(editor) {
       parent.remove();
     }
   });
-  editor.addShortcut("ctrl+shift+alt+u", "unwrapParent", "unwrapParent");
+  editor.addShortcut("meta+shift+alt+u", "unwrapParent", "unwrapParent");
   // Optional: Add a toolbar button to unwrap
   editor.ui.registry.addButton("unwrapParentButton", {
     text: "Unwrap Element",
-    tooltip: "Unwrap parent element of the current selection",
+    tooltip: "Unwrap parent element of the current selection (Meta+Shift+Alt+U)",
     onAction: function () {
       editor.execCommand("unwrapParent");
     },
@@ -119,14 +119,14 @@ function registerFormatters(editor) {
   editor.ui.registry.addButton("deleteCurrentElementButton", {
     text: "Delete Element",
     tooltip:
-      "Delete the closest div, p, or tr element where the cursor is currently placed",
+      "Delete the closest div, p, or tr element where the cursor is currently placed (Meta+Shift+K)",
     onAction: function () {
       editor.execCommand("deleteCurrentElement");
     },
   });
 
   editor.addShortcut(
-    "ctrl+shift+k",
+    "meta+shift+k",
     "deleteCurrentElement",
     "deleteCurrentElement"
   );

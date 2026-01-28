@@ -36,13 +36,13 @@ function setupListReordering(editor) {
     // Optional toolbar buttons
     editor.ui.registry.addButton('moveItemUp', {
         icon: 'arrow-up',
-        tooltip: 'Move list item up',
+        tooltip: 'Move list item up (Alt+Up)',
         onAction: () => editor.execCommand('moveItemUp')
     });
 
     editor.ui.registry.addButton('moveItemDown', {
         icon: 'arrow-down',
-        tooltip: 'Move list item down',
+        tooltip: 'Move list item down (Alt+Down)',
         onAction: () => editor.execCommand('moveItemDown')
     });
 }

@@ -88,10 +88,10 @@ function moveColumnLeft(editor) {
     moveColumn(editor, "left");
   });
 
-  editor.addShortcut("ctrl+alt+left", "Move column left", "moveColumnLeft");
+  editor.addShortcut("meta+alt+left", "Move column left", "moveColumnLeft");
 
   editor.ui.registry.addButton("moveColumnLeft", {
-    tooltip: "Move Column Left",
+    tooltip: "Move Column Left (Meta+Alt+Left)",
     icon: "arrow-left",
     onAction: () => editor.execCommand("moveColumnLeft")
   });
@@ -102,10 +102,10 @@ function moveColumnRight(editor) {
     moveColumn(editor, "right");
   });
 
-  editor.addShortcut("ctrl+alt+right", "Move column right", "moveColumnRight");
+  editor.addShortcut("meta+alt+right", "Move column right", "moveColumnRight");
 
   editor.ui.registry.addButton("moveColumnRight", {
-    tooltip: "Move Column Right",
+    tooltip: "Move Column Right (Meta+Alt+Right)",
     icon: "arrow-right",
     onAction: () => editor.execCommand("moveColumnRight")
   });
@@ -156,10 +156,10 @@ function moveRowUp(editor) {
     moveRow(editor, "up");
   });
 
-  editor.addShortcut("ctrl+alt+up", "Move row up", "moveRowUp");
+  editor.addShortcut("meta+alt+up", "Move row up", "moveRowUp");
 
   editor.ui.registry.addButton("moveRowUp", {
-    tooltip: "Move Row Up",
+    tooltip: "Move Row Up (Meta+Alt+Up)",
     icon: "action-prev",
     onAction: () => editor.execCommand("moveRowUp")
   });
@@ -170,10 +170,10 @@ function moveRowDown(editor) {
     moveRow(editor, "down");
   });
 
-  editor.addShortcut("ctrl+alt+down", "Move row down", "moveRowDown");
+  editor.addShortcut("meta+alt+down", "Move row down", "moveRowDown");
 
   editor.ui.registry.addButton("moveRowDown", {
-    tooltip: "Move Row Down",
+    tooltip: "Move Row Down (Meta+Alt+Down)",
     icon: "action-next",
     onAction: () => editor.execCommand("moveRowDown")
   });

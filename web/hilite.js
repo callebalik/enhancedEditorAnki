@@ -22,7 +22,7 @@ function hilite(editor, tinymce, name, color, key, buttontext){
     // https://www.tiny.cloud/docs/ui-components/typesoftoolbarbuttons/
     editor.ui.registry.addButton(name, {
         text: buttontext,
-        tooltip: name + '(' + key + ')',
+        tooltip: name + ' (' + key.charAt(0).toUpperCase() + key.slice(1).replace(/\+/g, '+') + ')',
         onAction: () => {editor.execCommand(name);}
     });
 }

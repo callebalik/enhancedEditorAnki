@@ -7,7 +7,7 @@ function clozesMain(editor) {
     editor.execCommand("mceInsertContent", 0, return_text);
     applyClozeHighlighting(editor);
   });
-  editor.addShortcut("ctrl+shift+c", "nextCloze", "nextCloze");
+  editor.addShortcut("meta+shift+c", "nextCloze", "nextCloze");
 
   //   Cloze no increment
   editor.addCommand("sameCloze", function () {
@@ -17,7 +17,7 @@ function clozesMain(editor) {
     editor.execCommand("mceInsertContent", 0, return_text);
     applyClozeHighlighting(editor);
   });
-  editor.addShortcut("ctrl+alt+shift+c", "addCloze", "sameCloze");
+  editor.addShortcut("meta+alt+shift+c", "addCloze", "sameCloze");
 
   editor.addCommand("clozeNumber", function () {
     let selected_text = editor.selection.getContent({ format: "html" });
@@ -25,7 +25,7 @@ function clozesMain(editor) {
     editor.execCommand("mceInsertContent", 0, return_text);
     applyClozeHighlighting(editor);
   });
-  editor.addShortcut("ctrl+shift+n", "clozeNumber", "clozeNumber");
+  editor.addShortcut("meta+shift+n", "clozeNumber", "clozeNumber");
 
     // Add event listener for double-click on the editor
     editor.on('dblclick', function (e) {

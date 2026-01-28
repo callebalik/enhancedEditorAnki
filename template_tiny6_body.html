@@ -143,22 +143,26 @@
                     const items = [
                         {
                             type: 'menuitem',
-                            text: 'Next Cloze (Ctrl+Shift+C)',
+                            text: 'Next Cloze',
+                            shortcut: 'Meta+Shift+C',
                             onAction: () => editor.execCommand('nextCloze')
                         },
                         {
                             type: 'menuitem',
-                            text: 'Same Cloze (Ctrl+Alt+Shift+C)',
+                            text: 'Same Cloze',
+                            shortcut: 'Meta+Alt+Shift+C',
                             onAction: () => editor.execCommand('sameCloze')
                         },
                         {
                             type: 'menuitem',
-                            text: 'Number Cloze (Ctrl+Shift+N)',
+                            text: 'Number Cloze',
+                            shortcut: 'Meta+Shift+N',
                             onAction: () => editor.execCommand('clozeNumber')
                         },
                         {
                             type: 'menuitem',
-                            text: 'Remove Cloze Highlighting (Ctrl+Shift+R)',
+                            text: 'Remove Cloze Highlighting',
+                            shortcut: 'Meta+Shift+R',
                             onAction: () => editor.execCommand('removeClozeHighlighting')
                         }
                     ];
@@ -290,6 +294,7 @@
 
             editor.ui.registry.addMenuItem("deleteCurrentElementItem", {
                 text: "Delete current element (closest div/p/tr)",
+                shortcut: "Meta+Shift+K",
                 icon: "remove",
                 onAction: () => editor.execCommand("deleteCurrentElement")
             });
