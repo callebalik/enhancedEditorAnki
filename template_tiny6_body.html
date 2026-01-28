@@ -78,7 +78,7 @@
             },
             dom: {
                 title: 'DOM',
-                items: 'editElementProperties sendCurrentNodeToConsole | addClassToElement | removeEmptyElements removeLineBreaks stripFontSize | unnestHeadings unwrapElement findRedundantDivs | deleteCurrentElementItem'
+                items: 'editElementProperties sendCurrentNodeToConsole | addClassToElement | removeEmptyElements removeLineBreaks stripFontSize | unnestHeadings unwrapElement findRedundantDivs | fixDomHierarchyItem deleteCurrentElementItem'
             }
         },
         contextmenu: "link inserttable | cell row column deletetable | list | image",
@@ -279,6 +279,12 @@
                 text: "Find redundant divs",
                 icon: "lock",
                 onAction: () => findRedundantDivs(editor)
+            });
+
+            editor.ui.registry.addMenuItem("fixDomHierarchyItem", {
+                text: "Fix DOM hierarchy (remove empty divs & unwrap heading wrappers)",
+                icon: "remove",
+                onAction: () => editor.execCommand("fixDomHierarchy")
             });
 
             editor.ui.registry.addMenuItem("deleteCurrentElementItem", {

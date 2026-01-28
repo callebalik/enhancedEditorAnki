@@ -58,3 +58,23 @@ function sendCurrentNodeToConsole(editor) {
   );
   console.log("Full node:", selectedNode);
 }
+
+function fixDomHierarchy(editor) {
+  // Get the current HTML content
+  const content = editor.getContent();
+
+  // Use DOMParser to parse the HTML content
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(content, "text/html");
+  $(doc).find("div:empty").remove();
+  console.log(doc.querySelectorAll("div:has(>h2)"));
+  while (doc.querySelectorAll("div:has(>h2)").length > 0) {
+    doc.querySelectorAll("div:has(>h2)").forEach((el) => {
+      el.replaceWith(function () {
+        return $(this).children();
+      });
+    });
+  }
+
+  editor.setContent(doc.body.innerHTML);
+}

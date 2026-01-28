@@ -1,31 +1,3 @@
-function fixDomHierarchy(editor) {
-  editor.addCommand("fixDomHierarchy", function () {
-    // Get the current HTML content
-    const content = editor.getContent();
-
-    // Use DOMParser to parse the HTML content
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(content, "text/html");
-    $(doc).find("div:empty").remove();
-    console.log(doc.querySelectorAll("div:has(>h2)"));
-    while (doc.querySelectorAll("div:has(>h2)").length > 0) {
-      doc.querySelectorAll("div:has(>h2)").forEach((el) => {
-        el.replaceWith(function () {
-          return $(this).children();
-        });
-      });
-    }
-
-    editor.setContent(doc.body.innerHTML);
-  });
-
-  editor.ui.registry.addButton("fixDomHierarchyButton", {
-    text: "🧹DOM",
-    tooltip: "Fix the DOM heierarchy",
-    onAction: () => editor.execCommand("fixDomHierarchy"),
-  });
-}
-
 function unwrapParentElement(editor) {
   editor.addCommand("unwrapParent", function () {
     // Get the current selected node
@@ -136,7 +108,6 @@ function registerFormatters(editor) {
 
   // Table operations are registered in tables.js tablesEnhanced plugin
   // Other formatter functions
-  fixDomHierarchy(editor);
   unwrapParentElement(editor);
   getClassOfCurrentElement(editor);
 
@@ -166,6 +137,10 @@ function registerFormatters(editor) {
 
   editor.addCommand("sendCurrentNodeToConsole", function () {
     sendCurrentNodeToConsole(editor);
+  });
+
+  editor.addCommand("fixDomHierarchy", function () {
+    fixDomHierarchy(editor);
   });
 
   // Add a toolbar button to get the current node
