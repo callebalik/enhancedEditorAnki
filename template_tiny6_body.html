@@ -191,7 +191,8 @@
 
             console.log("[DEBUG] Registering convertUlToTable menuItem");
             editor.ui.registry.addMenuItem("convertUlToTable", {
-                text: "Convert list to table",
+                text: "Ul→Table (nested list: headers from top-level, cells from nested items)",
+                icon: "unordered-list",
                 onAction: () => editor.execCommand("convertUlToTable")
             });
             console.log("[DEBUG] convertUlToTable menuItem registered");
