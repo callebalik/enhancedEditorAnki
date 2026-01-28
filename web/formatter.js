@@ -134,8 +134,7 @@ function getClassOfCurrentElement(editor) {
 // Register the command
 function registerFormatters(editor) {
 
-  makeCurrentRowHeader(editor);
-  makeCurrentCellHeader(editor);
+  // Table operations are registered in tables.js tablesEnhanced plugin
   // Other formatter functions
   fixDomHierarchy(editor);
   unwrapParentElement(editor);

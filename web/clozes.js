@@ -8,13 +8,6 @@ function clozesMain(editor) {
     applyClozeHighlighting(editor);
   });
   editor.addShortcut("ctrl+shift+c", "nextCloze", "nextCloze");
-  editor.ui.registry.addButton("nextCloze", {
-    text: "Cln",
-    tooltip: "nextCloze" + "(" + "ctrl+shift+c" + ")",
-    onAction: () => {
-      editor.execCommand("nextCloze");
-    },
-  });
 
   //   Cloze no increment
   editor.addCommand("sameCloze", function () {
@@ -25,13 +18,6 @@ function clozesMain(editor) {
     applyClozeHighlighting(editor);
   });
   editor.addShortcut("ctrl+alt+shift+c", "addCloze", "sameCloze");
-  editor.ui.registry.addButton("sameCloze", {
-    text: "Cls",
-    tooltip: "sameCloze" + "(" + "ctrl+alt+shift+c" + ")",
-    onAction: () => {
-      editor.execCommand("sameCloze");
-    },
-  });
 
   editor.addCommand("clozeNumber", function () {
     let selected_text = editor.selection.getContent({ format: "html" });
@@ -40,13 +26,6 @@ function clozesMain(editor) {
     applyClozeHighlighting(editor);
   });
   editor.addShortcut("ctrl+shift+n", "clozeNumber", "clozeNumber");
-  editor.ui.registry.addButton("clozeNumber", {
-    text: "Cln#",
-    tooltip: "clozeNumber" + "(" + "ctrl+shift+n" + ")",
-    onAction: () => {
-      editor.execCommand("clozeNumber");
-    },
-  });
 
     // Add event listener for double-click on the editor
     editor.on('dblclick', function (e) {

@@ -61,12 +61,22 @@
         ],        autosave_ask_before_unload: true,
         autosave_interval: "30s",
         autosave_restore_when_empty: false,        text_patterns: text_patterns,
-        toolbar1: '%(TOOLBAR1)s | addListItem fixDomHierarchyButton unwrapParent removeClozeHighlighting moveItemDown getClassOfCurrentElement makeCurrentCellHeaderButton deleteCurrentElementButton getCurrentNodeButton',  // Add addListItem button
-        toolbar2: '%(TOOLBAR2)s | mybutton TablesMenu',
+        toolbar1: '%(TOOLBAR1)s | fixDomHierarchyButton unwrapParent moveItemDown getClassOfCurrentElement deleteCurrentElementButton getCurrentNodeButton',
+        toolbar2: '%(TOOLBAR2)s | ClozesMenu mybutton',
         statusbar: false,
         promotion: false,
         menubar: 'edit view insert format tools table help media image',
         removed_menuitems: 'file print',
+        menu: {
+            format: {
+                title: 'Format',
+                items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat | removeTableStyles'
+            },
+            insert: {
+                title: 'Insert',
+                items: 'image link media addcomment pageembed template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor | insertdatetime | convertUlToTable'
+            }
+        },
         contextmenu: "link inserttable | cell row column deletetable | list | image",
         table_toolbar: tableToolbarConfig,
         setup: function (editor) {
@@ -119,12 +129,35 @@
             });
 
             editor.addShortcut('ctrl+shift+r', 'Remove cloze highlighting', 'removeClozeHighlighting');
-            editor.ui.registry.addButton("removeClozeHighlighting", {
-                text: "RCH",
-                tooltip: "removeClozeHighlighting" + "(" + "ctrl+shift+r" + ")",
-                onAction: () => {
-                    editor.execCommand("removeClozeHighlighting");
-                },
+
+            // Register Clozes MenuButton
+            editor.ui.registry.addMenuButton('ClozesMenu', {
+                text: 'Clozes',
+                fetch: (callback) => {
+                    const items = [
+                        {
+                            type: 'menuitem',
+                            text: 'Next Cloze (Ctrl+Shift+C)',
+                            onAction: () => editor.execCommand('nextCloze')
+                        },
+                        {
+                            type: 'menuitem',
+                            text: 'Same Cloze (Ctrl+Alt+Shift+C)',
+                            onAction: () => editor.execCommand('sameCloze')
+                        },
+                        {
+                            type: 'menuitem',
+                            text: 'Number Cloze (Ctrl+Shift+N)',
+                            onAction: () => editor.execCommand('clozeNumber')
+                        },
+                        {
+                            type: 'menuitem',
+                            text: 'Remove Cloze Highlighting (Ctrl+Shift+R)',
+                            onAction: () => editor.execCommand('removeClozeHighlighting')
+                        }
+                    ];
+                    callback(items);
+                }
             });
 
             // Add reload editor menu item
