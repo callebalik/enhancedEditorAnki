@@ -62,10 +62,10 @@
         autosave_interval: "30s",
         autosave_restore_when_empty: false,        text_patterns: text_patterns,
         toolbar1: '%(TOOLBAR1)s | fixDomHierarchyButton unwrapParent moveItemDown getClassOfCurrentElement deleteCurrentElementButton getCurrentNodeButton',
-        toolbar2: '%(TOOLBAR2)s | ClozesMenu mybutton',
+        toolbar2: '%(TOOLBAR2)s | ClozesMenu',
         statusbar: false,
         promotion: false,
-        menubar: 'edit view insert format tools table help media image',
+        menubar: 'edit view insert format tools table dom help media image',
         removed_menuitems: 'file print',
         menu: {
             format: {
@@ -75,6 +75,10 @@
             insert: {
                 title: 'Insert',
                 items: 'image link media addcomment pageembed template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor | insertdatetime | convertUlToTable'
+            },
+            dom: {
+                title: 'DOM',
+                items: 'elementProperties addClassToElement | removeEmptyElements removeLineBreaks stripFontSize | unnestHeadings unwrapElement findRedundantDivs'
             }
         },
         contextmenu: "link inserttable | cell row column deletetable | list | image",
@@ -196,6 +200,88 @@
                 onAction: () => editor.execCommand("convertUlToTable")
             });
             console.log("[DEBUG] convertUlToTable menuItem registered");
+
+            // Register DOM menu items
+            console.log("[DEBUG] Registering DOM menu items");
+
+            editor.ui.registry.addMenuItem("elementProperties", {
+                text: "Element Properties",
+                icon: "code-sample",
+                onAction: () => {
+                    const selectedNode = editor.selection.getNode();
+                    editor.windowManager.open(createDialogConfig(selectedNode));
+                }
+            });
+
+            editor.ui.registry.addMenuItem("addClassToElement", {
+                text: "Add class to current element",
+                icon: "code-sample",
+                onAction: () => {
+                    const node = editor.selection.getNode();
+                    const currentClasses = node.className
+                        ? `Current classes: ${node.className}`
+                        : "No current classes";
+                    const tagName = node.tagName.toLowerCase();
+                    const className = prompt(
+                        `Element: <${tagName}> \n${currentClasses}\n\nEnter the class name`
+                    );
+                    if (className) {
+                        editor.dom.addClass(node, className);
+                    }
+                }
+            });
+
+            editor.ui.registry.addMenuItem("removeEmptyElements", {
+                text: "Remove empty elements",
+                icon: "remove",
+                onAction: () => editor.setContent(
+                    editor.getContent().replace(/<(\w+)(\s*[^>]*)>(\s|&nbsp;)*<\/\1>/g, "")
+                )
+            });
+
+            editor.ui.registry.addMenuItem("removeLineBreaks", {
+                text: "Remove line breaks from selection",
+                onAction: () => {
+                    const selectedContent = editor.selection.getContent({ format: "html" });
+                    const strippedContent = selectedContent.replace(/font-size:\s*[^;]+;?/gi, "");
+                    const container = editor.selection.getNode();
+                    container.innerHTML = container.innerHTML.replace(selectedContent, strippedContent);
+                }
+            });
+
+            editor.ui.registry.addMenuItem("stripFontSize", {
+                text: "Strip font-size from selection",
+                icon: "remove",
+                onAction: () => {
+                    const selectedContent = editor.selection.getContent({ format: "html" });
+                    const strippedContent = selectedContent.replace(/font-size:\s*[^;]+;?/gi, "");
+                    const container = editor.selection.getNode();
+                    container.innerHTML = container.innerHTML.replace(selectedContent, strippedContent);
+                }
+            });
+
+            editor.ui.registry.addMenuItem("unnestHeadings", {
+                text: "Unnest headings",
+                icon: "lock",
+                onAction: () => unnestHeadings(editor)
+            });
+
+            editor.ui.registry.addMenuItem("unwrapElement", {
+                text: "Unwrap element",
+                icon: "lock",
+                onAction: () => {
+                    const node = editor.selection.getNode();
+                    unwrapElement(editor, node);
+                }
+            });
+
+            editor.ui.registry.addMenuItem("findRedundantDivs", {
+                text: "Find redundant divs",
+                icon: "lock",
+                onAction: () => findRedundantDivs(editor)
+            });
+
+            console.log("[DEBUG] DOM menu items registered");
 
             // Debug: Check what's in the registry
             console.log("[DEBUG] All registered menuItems:", Object.keys(editor.ui.registry.getAll().menuItems || {}));
