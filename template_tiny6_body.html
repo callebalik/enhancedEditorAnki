@@ -70,7 +70,7 @@
         menu: {
             format: {
                 title: 'Format',
-                items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat | removeTableStyles'
+                items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat | removeTableStyles | removeLineBreaks stripFontSize'
             },
             insert: {
                 title: 'Insert',
@@ -78,7 +78,7 @@
             },
             dom: {
                 title: 'DOM',
-                items: 'editElementProperties sendCurrentNodeToConsole | addClassToElement | removeEmptyElements removeLineBreaks stripFontSize | unnestHeadings unwrapElement findRedundantDivs | fixDomHierarchyItem deleteCurrentElementItem'
+                items: 'editElementProperties sendCurrentNodeToConsole | addClassToElement | removeEmptyElements | unnestHeadings unwrapElement findRedundantDivs | fixDomHierarchyItem deleteCurrentElementItem'
             }
         },
         contextmenu: "link inserttable | cell row column deletetable | list | image",
@@ -188,7 +188,7 @@
             console.log("[DEBUG] Registering removeTableStyles menuItem");
             editor.ui.registry.addMenuItem("removeTableStyles", {
                 text: "Clean table styles",
-                icon: "code-sample",
+                icon: "table",
                 onAction: () => editor.execCommand("removeTableStyles")
             });
             console.log("[DEBUG] removeTableStyles menuItem registered");
@@ -240,7 +240,8 @@
             });
 
             editor.ui.registry.addMenuItem("removeLineBreaks", {
-                text: "Remove line breaks from selection",
+                text: "🧹 Remove line breaks from selection",
+                icon: "remove-formatting",
                 onAction: () => {
                     const selectedContent = editor.selection.getContent({ format: "html" });
                     const strippedContent = selectedContent.replace(/font-size:\s*[^;]+;?/gi, "");
@@ -250,8 +251,8 @@
             });
 
             editor.ui.registry.addMenuItem("stripFontSize", {
-                text: "Strip font-size from selection",
-                icon: "remove",
+                text: "🧹 Strip font-size from selection",
+                icon: "remove-formatting",
                 onAction: () => {
                     const selectedContent = editor.selection.getContent({ format: "html" });
                     const strippedContent = selectedContent.replace(/font-size:\s*[^;]+;?/gi, "");
