@@ -161,7 +161,11 @@ function registerFormatters(editor) {
   );
 
   editor.addCommand("getCurrentNode", function () {
-    getCurrentNode(editor);
+    sendCurrentNodeToConsole(editor);
+  });
+
+  editor.addCommand("sendCurrentNodeToConsole", function () {
+    sendCurrentNodeToConsole(editor);
   });
 
   // Add a toolbar button to get the current node
@@ -198,16 +202,5 @@ function deleteCurrentElement(editor) {
       editor.nodeChanged();
     }
   }
-}
-
-function getCurrentNode(editor) {
-  // Get the current selected node
-  const selectedNode = editor.selection.getNode();
-  // Display the node name and class (you can change this to any other action you need)
-  console.log(
-    `Node name: ${selectedNode.nodeName}\nClass: ${selectedNode.className}`
-  );
-
-  return selectedNode;
 }
 

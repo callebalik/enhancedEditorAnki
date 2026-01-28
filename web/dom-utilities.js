@@ -48,3 +48,13 @@ function findRedundantDivs(editor) {
     }
   });
 }
+
+function sendCurrentNodeToConsole(editor) {
+  // Get the current selected node
+  const selectedNode = editor.selection.getNode();
+  // Log node details to console
+  console.log(
+    `Node name: ${selectedNode.nodeName}\nClass: ${selectedNode.className}`
+  );
+  console.log("Full node:", selectedNode);
+}

@@ -61,7 +61,7 @@
         ],        autosave_ask_before_unload: true,
         autosave_interval: "30s",
         autosave_restore_when_empty: false,        text_patterns: text_patterns,
-        toolbar1: '%(TOOLBAR1)s | fixDomHierarchyButton unwrapParent moveItemDown getClassOfCurrentElement deleteCurrentElementButton getCurrentNodeButton',
+        toolbar1: '%(TOOLBAR1)s | fixDomHierarchyButton unwrapParent moveItemDown',
         toolbar2: '%(TOOLBAR2)s | ClozesMenu',
         statusbar: false,
         promotion: false,
@@ -78,7 +78,7 @@
             },
             dom: {
                 title: 'DOM',
-                items: 'elementProperties addClassToElement | removeEmptyElements removeLineBreaks stripFontSize | unnestHeadings unwrapElement findRedundantDivs'
+                items: 'editElementProperties sendCurrentNodeToConsole | addClassToElement | removeEmptyElements removeLineBreaks stripFontSize | unnestHeadings unwrapElement findRedundantDivs | deleteCurrentElementItem'
             }
         },
         contextmenu: "link inserttable | cell row column deletetable | list | image",
@@ -204,8 +204,8 @@
             // Register DOM menu items
             console.log("[DEBUG] Registering DOM menu items");
 
-            editor.ui.registry.addMenuItem("elementProperties", {
-                text: "Element Properties",
+            editor.ui.registry.addMenuItem("editElementProperties", {
+                text: "Edit Element Properties",
                 icon: "code-sample",
                 onAction: () => {
                     const selectedNode = editor.selection.getNode();
@@ -279,6 +279,18 @@
                 text: "Find redundant divs",
                 icon: "lock",
                 onAction: () => findRedundantDivs(editor)
+            });
+
+            editor.ui.registry.addMenuItem("deleteCurrentElementItem", {
+                text: "Delete current element (closest div/p/tr)",
+                icon: "remove",
+                onAction: () => editor.execCommand("deleteCurrentElement")
+            });
+
+            editor.ui.registry.addMenuItem("sendCurrentNodeToConsole", {
+                text: "Send Current Node to Console",
+                icon: "help",
+                onAction: () => editor.execCommand("sendCurrentNodeToConsole")
             });
 
             console.log("[DEBUG] DOM menu items registered");
