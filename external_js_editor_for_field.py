@@ -9,8 +9,8 @@ from aqt.utils import tooltip
 from .config import gc
 from .dialog import ExtraWysiwygEditorForField
 from .helpers import (
-    addonfoldername,
     addon_path,
+    addonfoldername,
     hiliters_tinymce,
     maybe_pre_process_html,
     readfile,
@@ -26,6 +26,7 @@ else:
 if os.path.isfile(os.path.join(user_files_folder, "additional_buttons_menuentries.py")):
     from .user_files.additional_buttons_menuentries import get_additional_arglist
 else:
+
     def get_additional_arglist():
         return []
 
@@ -33,38 +34,17 @@ else:
 mw.addonManager.setWebExports(__name__, r"((user_files[/\\])?web[/\\].*)")
 
 
-def editor_update_field(editor):
-    if not hasattr(editor, "edited_field_content") or not isinstance(
-        editor.edited_field_content, str
-    ):
-        tooltip("Unknown error in Add-on. Aborting ...")
-        return
-
-    # pasting images into TinyMCE6 creates inline images which in turn slow down Anki
-    # see e.g. https://forums.ankiweb.net/t/anki-browse-extremely-laggy/32533/8
-    # the following should convert inline images, save external images and remove some
-    # problematic tags and it should work in 2.1.22 and 2.1.65.
-    html = editor._pastePreFilter(html=editor.edited_field_content, internal=False)
-
-    editor.note.fields[editor.myfield] = html
-    editor.edited_field_content = ""
-    if not editor.addMode:
-        editor.note.flush()
-    editor.loadNote(focusTo=editor.myfield)
-
-
-def on_dialog_finished(editor, status):
-    if status:
-        editor.saveNow(lambda e=editor: editor_update_field(e))
-
-
 def get_settings(chosen_name):
     if chosen_name in ["T6", "TM"]:
-        defau1 = ("undo redo fontfamily blocks alignleft aligncenter alignright alignjustify "
-                  "link unlink charmap cleanup nextCloze sameCloze code codesample")
+        defau1 = (
+            "undo redo fontfamily blocks alignleft aligncenter alignright alignjustify "
+            "link unlink charmap cleanup nextCloze sameCloze code codesample"
+        )
         tb1 = gc("TinyMCE6-toolbar1", defau1)
-        defau2 = ("bold italic underline strikethrough superscript subscript forecolor backcolor "
-                  "removeformat hr blockquote numlist bullist anchor outdent indent table ltr rtl")
+        defau2 = (
+            "bold italic underline strikethrough superscript subscript forecolor backcolor "
+            "removeformat hr blockquote numlist bullist anchor outdent indent table ltr rtl"
+        )
         tb2 = gc("TinyMCE6-toolbar2", defau2)
         return {
             "js_file": "tinymce6/js/tinymce/tinymce.min.js",
@@ -83,18 +63,20 @@ def get_settings(chosen_name):
                 "FONTSIZE": gc("fontSize"),
                 "FONTNAME": gc("font"),
                 #  https://www.tiny.cloud/blog/dark-mode-tinymce-rich-text-editor/
-                "CUSTOMBGCOLOR": ""
-                        if theme_manager.night_mode
-                        else "this.getDoc().body.style.backgroundColor = '#e4e2e0';",
+                "CUSTOMBGCOLOR": (
+                    ""
+                    if theme_manager.night_mode
+                    else "this.getDoc().body.style.backgroundColor = '#e4e2e0';"
+                ),
                 # https://www.tiny.cloud/blog/  dark-mode-tinymce-rich-text-editor/
                 "CONTENTCSS": '"custom",' if theme_manager.night_mode else "",
                 "SKIN": "oxide-dark" if theme_manager.night_mode else "oxide",
                 "THEME": "silver",
                 "TOOLBAR1": tb1,
                 "TOOLBAR2": tb2,
-                "HILITERS": hiliters_tinymce
-                        if gc("show background color buttons")
-                        else "",
+                "HILITERS": (
+                    hiliters_tinymce if gc("show background color buttons") else ""
+                ),
             },
         }
     for js_editor_name, settings_dict in additional_editors_dict.items():
@@ -103,8 +85,14 @@ def get_settings(chosen_name):
 
 
 def show_wysiwyg_dialog(editor, field, editorname):
-    field_content = editor.note.fields[field]
-        
+    """Open the TinyMCE editor window for a specific note field.
+
+    The dialog stores the note ID and field index directly (not the editor reference),
+    allowing it to survive browser/editor closure and detect external note changes.
+    """
+    note = editor.note
+    field_content = note.fields[field]
+
     content_surrounded_with_div = False
     if field_content.startswith("<div>") and field_content.endswith("</div>"):
         content_surrounded_with_div = True
@@ -112,8 +100,13 @@ def show_wysiwyg_dialog(editor, field, editorname):
     settings = get_settings(editorname)
     html = maybe_pre_process_html(field_content)
     bodyhtml = settings["body_except_for_field_content"].replace("CONTENTCONTENT", html)
-    dialog = ExtraWysiwygEditorForField(
-        editor=editor,
+
+    # Create the editor window with note_id and field_idx instead of editor reference
+    # This allows the window to survive browser/editor closure
+    ExtraWysiwygEditorForField(
+        note_id=note.id,
+        field_idx=field,
+        original_html=field_content,
         bodyhtml=bodyhtml,
         js_file=settings["js_file"],
         js_save_command=settings["jssavecmd"],
@@ -122,13 +115,7 @@ def show_wysiwyg_dialog(editor, field, editorname):
         content_surrounded_with_div=content_surrounded_with_div,
         web_path=settings["webpath"],
     )
-    # exec_() doesn't work, see  https://stackoverflow.com/questions/39638749/
-    dialog.finished.connect(
-        lambda status, func=on_dialog_finished, e=editor: func(e, status)
-    )
-    dialog.setModal(True)
-    dialog.show()
-    dialog.web.setFocus()
+    # Note: The dialog is non-modal and shows itself in __init__
 
 
 def external_editor_start(editor, editorname):
@@ -159,8 +146,8 @@ def setupEditorButtonsFilter(buttons, editor):
     arglist = [
         #  0                        1           2             3          4       5
         # show                    shortcut     tooltip     functionarg  cmd   icon
-        [gc("_TinyMCE6 - enable"), cut_T6,      tip_T6,     "T6",       "T6", None],
-        [use_default,             cut_default, tip_default, "TM",       "TM", None],
+        [gc("_TinyMCE6 - enable"), cut_T6, tip_T6, "T6", "T6", None],
+        [use_default, cut_default, tip_default, "TM", "TM", None],
     ]
     additional_arglist = get_additional_arglist()
     arglist.extend(additional_arglist)
@@ -177,4 +164,6 @@ def setupEditorButtonsFilter(buttons, editor):
         buttons.append(b)
 
     return buttons
+
+
 addHook("setupEditorButtons", setupEditorButtonsFilter)
