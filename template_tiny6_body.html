@@ -80,6 +80,7 @@
         contextmenu: "link inserttable | cell row column deletetable | list | image",
         table_toolbar: tableToolbarConfig,
         setup: function (editor) {
+            console.log("[DEBUG] Setup function started");
 
             editor.on('init', function () {
                 this.getDoc().body.style.fontSize = `${myfontsize.toString()}px`;
@@ -98,6 +99,7 @@
             registerFormatters(editor);
             clozesMain(editor);
             shortcutsMain(editor);
+            console.log("[DEBUG] External scripts loaded");
 
             editor.on('dblclick', function (e) {
                 const selection = editor.selection;
@@ -159,6 +161,7 @@
                     callback(items);
                 }
             });
+            console.log("[DEBUG] ClozesMenu registered");
 
             // Add reload editor menu item
             editor.ui.registry.addMenuItem('reloadeditor', {
@@ -172,8 +175,30 @@
                     }
                 }
             });
+            console.log("[DEBUG] Reload editor menu item registered");
 
             addMenu(editor);
+            console.log("[DEBUG] addMenu() called");
+
+            // Register menu items for native menus (registered at end of setup)
+            console.log("[DEBUG] Registering removeTableStyles menuItem");
+            editor.ui.registry.addMenuItem("removeTableStyles", {
+                text: "Clean table styles",
+                icon: "code-sample",
+                onAction: () => editor.execCommand("removeTableStyles")
+            });
+            console.log("[DEBUG] removeTableStyles menuItem registered");
+
+            console.log("[DEBUG] Registering convertUlToTable menuItem");
+            editor.ui.registry.addMenuItem("convertUlToTable", {
+                text: "Convert list to table",
+                onAction: () => editor.execCommand("convertUlToTable")
+            });
+            console.log("[DEBUG] convertUlToTable menuItem registered");
+
+            // Debug: Check what's in the registry
+            console.log("[DEBUG] All registered menuItems:", Object.keys(editor.ui.registry.getAll().menuItems || {}));
+            console.log("[DEBUG] Setup function complete");
         }
     });
 </script>

@@ -27,7 +27,7 @@ function makeCurrentRowHeader(editor) {
       }
     }
   });
-  
+
   editor.ui.registry.addButton("makeCurrentRowHeader", {
     text: "Row→Header",
     tooltip: "Make Row Header",
@@ -48,7 +48,7 @@ function makeCurrentCellHeader(editor) {
   });
 
   console.log("succesfully loaded makeCurrentCellHeader");
-  
+
   editor.ui.registry.addButton("makeCurrentCellTh", {
     text: "Cell→Header",
     tooltip: "Make Cell Header",
@@ -89,7 +89,7 @@ function moveColumnLeft(editor) {
   });
 
   editor.addShortcut("ctrl+alt+left", "Move column left", "moveColumnLeft");
-  
+
   editor.ui.registry.addButton("moveColumnLeft", {
     tooltip: "Move Column Left",
     icon: "arrow-left",
@@ -103,7 +103,7 @@ function moveColumnRight(editor) {
   });
 
   editor.addShortcut("ctrl+alt+right", "Move column right", "moveColumnRight");
-  
+
   editor.ui.registry.addButton("moveColumnRight", {
     tooltip: "Move Column Right",
     icon: "arrow-right",
@@ -157,7 +157,7 @@ function moveRowUp(editor) {
   });
 
   editor.addShortcut("ctrl+alt+up", "Move row up", "moveRowUp");
-  
+
   editor.ui.registry.addButton("moveRowUp", {
     tooltip: "Move Row Up",
     icon: "action-prev",
@@ -171,7 +171,7 @@ function moveRowDown(editor) {
   });
 
   editor.addShortcut("ctrl+alt+down", "Move row down", "moveRowDown");
-  
+
   editor.ui.registry.addButton("moveRowDown", {
     tooltip: "Move Row Down",
     icon: "action-next",
@@ -180,6 +180,7 @@ function moveRowDown(editor) {
 }
 
 function removeTableStyles(editor) {
+  console.log("[DEBUG tables.js] Registering removeTableStyles command");
   editor.addCommand("removeTableStyles", function () {
     // Get the current HTML content
     const content = editor.getContent();
@@ -219,38 +220,32 @@ function removeTableStyles(editor) {
     // Set the modified HTML content back into the editor
     editor.setContent(doc.body.innerHTML);
   });
-  
+  console.log("[DEBUG tables.js] removeTableStyles command registered");
+
   editor.ui.registry.addButton("removeTableStyles", {
     text: "Remove Styles",
     tooltip: "Clean Table Styles",
     icon: "code-sample",
     onAction: () => editor.execCommand("removeTableStyles")
   });
-  
-  // Add to Format menu
-  editor.ui.registry.addMenuItem("removeTableStyles", {
-    text: "Clean table styles",
-    onAction: () => editor.execCommand("removeTableStyles")
-  });
 }
 
 function addTableMenu(editor) {
-  // Add "Convert ul to table" to Insert menu
-  editor.ui.registry.addMenuItem("convertUlToTable", {
-    text: "Convert list to table",
-    onAction: () => {
-      const node = editor.selection.getNode();
-      const closestUl = editor.dom.getParent(node, "ul");
-      if (closestUl) {
-        ulElement = editor.selection.select(closestUl);
-        const table = ulToTable(ulElement);
-        editor.dom.insertAfter(table, ulElement);
-        editor.selection.select(table);
-      } else {
-        alert("No parent list found from selection");
-      }
+  // Register command for converting list to table
+  console.log("[DEBUG tables.js] Registering convertUlToTable command");
+  editor.addCommand("convertUlToTable", function () {
+    const node = editor.selection.getNode();
+    const closestUl = editor.dom.getParent(node, "ul");
+    if (closestUl) {
+      const ulElement = editor.selection.select(closestUl);
+      const table = ulToTable(ulElement);
+      editor.dom.insertAfter(table, ulElement);
+      editor.selection.select(table);
+    } else {
+      alert("No parent list found from selection");
     }
   });
+  console.log("[DEBUG tables.js] convertUlToTable command registered");
 }
 
 function ulToTable(ulElement) {
