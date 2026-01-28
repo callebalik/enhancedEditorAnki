@@ -67,16 +67,19 @@ class ExtraWysiwygEditorForField(QDialog):
         )
         main_layout.addWidget(self.buttonBox)
 
-        # Add maximize, reload webview, and reload backend buttons
+        # Add maximize, reload webview, reload template, and reload backend buttons
         maximize_button = QPushButton("Maximize")
         maximize_button.clicked.connect(self.maximize_window)
         reload_webview_button = QPushButton("Reload Webview")
         reload_webview_button.clicked.connect(self.reload_webview)
+        reload_template_button = QPushButton("Reload Template (Dev)")
+        reload_template_button.clicked.connect(self.reload_template)
         reload_backend_button = QPushButton("Reload Backend")
         reload_backend_button.clicked.connect(self.reload_backend)
         button_layout = QHBoxLayout()
         button_layout.addWidget(maximize_button)
         button_layout.addWidget(reload_webview_button)
+        button_layout.addWidget(reload_template_button)
         button_layout.addWidget(reload_backend_button)
         main_layout.addLayout(button_layout)
 
@@ -150,9 +153,123 @@ class ExtraWysiwygEditorForField(QDialog):
         # Reload the webview
         self.web.reload()
 
+    def reload_template(self):
+        """Development helper: Reload template file without Anki restart"""
+        import sys
+        from importlib import reload
+
+        from aqt.utils import tooltip
+
+        # Check if TinyMCE has unsaved changes
+        is_dirty = self.web.sync_execJavaScript(
+            "tinymce.activeEditor ? tinymce.activeEditor.isDirty() : false"
+        )
+
+        if is_dirty:
+            ok = askUser(
+                "You have unsaved changes. Are you sure you want to reload the template?"
+            )
+            if not ok:
+                return
+
+        try:
+            # Force reload of external_js_editor_for_field module to clear cache
+            module_name = None
+            for name, mod in sys.modules.items():
+                if "external_js_editor_for_field" in name:
+                    module_name = name
+                    break
+            if module_name:
+                reload(sys.modules[module_name])
+
+            # Get fresh settings with reloaded template
+            from .external_js_editor_for_field import get_settings
+
+            settings = get_settings("T6")
+
+            # Get current content before reload
+            current_content = self.web.sync_execJavaScript(
+                "tinymce.activeEditor ? tinymce.activeEditor.getContent() : ''"
+            )
+
+            # Rebuild HTML with fresh template
+            new_body = settings["body_except_for_field_content"].replace(
+                "CONTENTCONTENT", current_content
+            )
+
+            # Reload webview with new HTML
+            self.web.stdHtml(
+                body=new_body,
+                css=cssfiles,
+                js=[self.js_file] + other_jsfiles,
+                head="",
+                context=self,
+            )
+
+            tooltip("Template reloaded successfully!")
+        except Exception as e:
+            tooltip(f"Error reloading template: {str(e)}")
+
     def reload_backend(self):
         from aqt.utils import tooltip
 
         tooltip(
             "Backend changes require an Anki restart. Please close this dialog and restart Anki."
         )
+
+    def reload_template(self):
+        """Development helper: Reload template file without Anki restart"""
+        from aqt.utils import tooltip
+
+        # Check if TinyMCE has unsaved changes
+        is_dirty = self.web.sync_execJavaScript(
+            "tinymce.activeEditor ? tinymce.activeEditor.isDirty() : false"
+        )
+
+        if is_dirty:
+            ok = askUser(
+                "You have unsaved changes. Are you sure you want to reload the template?"
+            )
+            if not ok:
+                return
+
+        # Re-import to get fresh template
+        import sys
+        from importlib import reload
+
+        from .external_js_editor_for_field import get_settings
+
+        # Force reload of external_js_editor_for_field module to clear cache
+        module_name = None
+        for name, mod in sys.modules.items():
+            if "external_js_editor_for_field" in name:
+                module_name = name
+                break
+        if module_name:
+            reload(sys.modules[module_name])
+
+        # Get fresh settings with reloaded template
+        settings = get_settings("T6")  # Assuming TinyMCE6
+
+        # Get current content before reload
+        current_content = self.web.sync_execJavaScript(
+            "tinymce.activeEditor ? tinymce.activeEditor.getContent() : ''"
+        )
+
+        # Rebuild HTML with fresh template
+        new_body = settings["body_except_for_field_content"].replace(
+            "CONTENTCONTENT", current_content
+        )
+
+        # Reload webview with new HTML
+        from .vars import cssfiles, other_jsfiles
+
+        self.web.stdHtml(
+            body=new_body,
+            css=cssfiles,
+            js=[self.js_file] + other_jsfiles,
+            head="",
+            context=self,
+        )
+
+        tooltip("Template reloaded successfully!")
