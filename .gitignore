@@ -1,2 +1,3 @@
 web/tinymce6/js/tinymce/skins/content/custom/*.css*
 *pycache*
+node_modules
