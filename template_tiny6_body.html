@@ -76,6 +76,10 @@
                 title: 'Insert',
                 items: 'image link media addcomment pageembed template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor | insertdatetime | convertUlToTable'
             },
+            table: {
+                title: 'Table',
+                items: 'inserttable tableprops deletetable | cell row column | transposeTable convertUlToTable'
+            },
             dom: {
                 title: 'DOM',
                 items: 'editElementProperties sendCurrentNodeToConsole | addClassToElement | removeEmptyElements | unnestHeadings wrapElement unwrapElement findRedundantDivs | fixDomHierarchyItem deleteCurrentElementItem'
@@ -190,6 +194,12 @@
 
             // Register menu items for native menus (registered at end of setup)
             console.log("[DEBUG] Registering removeTableStyles menuItem");
+            editor.ui.registry.addMenuItem("transposeTable", {
+                text: "Transpose table (flip columns↔rows)",
+                icon: "table-row-properties",
+                onAction: () => editor.execCommand("transposeTable")
+            });
+
             editor.ui.registry.addMenuItem("removeTableStyles", {
                 text: "Clean table styles",
                 icon: "table",

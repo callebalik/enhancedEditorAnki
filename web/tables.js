@@ -299,12 +299,85 @@ function ulToTable(ulElement) {
   return table;
 }
 
+function transposeTable(editor) {
+  editor.addCommand("transposeTable", function () {
+    const node = editor.selection.getNode();
+    const table = editor.dom.getParent(node, "table");
+    if (!table) return;
+
+    // Collect all rows (thead + tbody + tfoot) into a unified 2D matrix
+    const allRows = Array.from(table.rows);
+    if (allRows.length === 0) return;
+
+    const numCols = Math.max(...allRows.map((r) => r.cells.length));
+    const numRows = allRows.length;
+
+    // Build source matrix: [{innerHTML, isHeader}]
+    const matrix = allRows.map((tr) => {
+      return Array.from({ length: numCols }, (_, colIdx) => {
+        const cell = tr.cells[colIdx];
+        return {
+          html: cell ? cell.innerHTML : "",
+          isHeader: cell ? cell.tagName === "TH" : false
+        };
+      });
+    });
+
+    // Transpose: new matrix is [numCols × numRows]
+    const transposed = Array.from({ length: numCols }, (_, j) =>
+      Array.from({ length: numRows }, (_, i) => matrix[i][j])
+    );
+
+    // Rebuild table DOM
+    // Remove all existing section elements
+    Array.from(table.querySelectorAll("thead, tbody, tfoot")).forEach((s) =>
+      s.remove()
+    );
+
+    // First transposed row → thead with <th> cells
+    const thead = document.createElement("thead");
+    const headerTr = document.createElement("tr");
+    transposed[0].forEach((cell) => {
+      const th = document.createElement("th");
+      th.innerHTML = cell.html;
+      headerTr.appendChild(th);
+    });
+    thead.appendChild(headerTr);
+    table.appendChild(thead);
+
+    // Remaining transposed rows → tbody with <td> cells
+    if (transposed.length > 1) {
+      const tbody = document.createElement("tbody");
+      transposed.slice(1).forEach((rowData) => {
+        const tr = document.createElement("tr");
+        rowData.forEach((cell) => {
+          const td = document.createElement("td");
+          td.innerHTML = cell.html;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+    }
+
+    editor.nodeChanged();
+  });
+
+  editor.ui.registry.addButton("transposeTable", {
+    text: "Transpose",
+    tooltip: "Transpose table: flip columns\u2194rows (first column becomes header row)",
+    icon: "table-row-properties",
+    onAction: () => editor.execCommand("transposeTable")
+  });
+}
+
 // Define the complete table_toolbar configuration with custom operations
 const tableToolbarConfig =
   "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol" +
   " | tablemergecells tablesplitcells | tablecellprops" +
   " | moveColumnLeft moveColumnRight moveRowUp moveRowDown" +
-  " | makeCurrentCellTh makeCurrentRowHeader removeTableStyles";
+  " | makeCurrentCellTh makeCurrentRowHeader removeTableStyles" +
+  " | transposeTable";
 
 
 
@@ -317,4 +390,5 @@ tinymce.PluginManager.add("tablesEnhanced", function (editor) {
     makeCurrentCellHeader(editor);
     removeTableStyles(editor);
     addTableMenu(editor);
+    transposeTable(editor);
   });
