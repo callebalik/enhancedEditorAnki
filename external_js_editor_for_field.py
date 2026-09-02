@@ -46,6 +46,7 @@ def get_settings(chosen_name):
             "removeformat hr blockquote numlist bullist anchor outdent indent table ltr rtl"
         )
         tb2 = gc("TinyMCE6-toolbar2", defau2)
+        webpath = f"/_addons/{addonfoldername}/web/"
         return {
             "js_file": "tinymce6/js/tinymce/tinymce.min.js",
             "jssavecmd": """
@@ -55,7 +56,7 @@ def get_settings(chosen_name):
             """,
             "wintitle": "Anki - edit current field in TinyMCE",
             "dialogname": "tinymce6",
-            "webpath": f"/_addons/{addonfoldername}/web/",
+            "webpath": webpath,
             "body_except_for_field_content": readfile(
                 addon_path, "template_tiny6_body.html"
             )
@@ -74,6 +75,7 @@ def get_settings(chosen_name):
                 "THEME": "silver",
                 "TOOLBAR1": tb1,
                 "TOOLBAR2": tb2,
+                "WEBPATH": webpath,
                 "HILITERS": (
                     hiliters_tinymce if gc("show background color buttons") else ""
                 ),
