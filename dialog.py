@@ -19,7 +19,7 @@ from aqt.qt import (
 )
 from aqt.utils import askUser, restoreGeom, saveGeom, tooltip
 
-from .helpers import post_process_html
+from .helpers import post_process_html, window_geometry_key
 from .my_webview import MyWebView
 from .vars import cssfiles, other_jsfiles
 
@@ -108,7 +108,7 @@ class ExtraWysiwygEditorForField(QMainWindow):
         self._hook_connected = True
 
         # Restore geometry after all setup, with default size for first launch
-        restoreGeom(self, "805891399_winsize", default_size=(810, 700))
+        restoreGeom(self, window_geometry_key, default_size=(810, 700))
 
         self.show()
         self.web.setFocus()
@@ -293,7 +293,7 @@ class ExtraWysiwygEditorForField(QMainWindow):
             gui_hooks.operation_did_execute.remove(self.on_operation_did_execute)
             self._hook_connected = False
 
-        saveGeom(self, "805891399_winsize")
+        saveGeom(self, window_geometry_key)
         self.web = None
         mw.deferred_delete_and_garbage_collect(self)
 

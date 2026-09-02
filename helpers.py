@@ -9,6 +9,7 @@ from .htmlmin import minify
 
 addon_path = os.path.dirname(__file__)
 addonfoldername = os.path.basename(addon_path)
+window_geometry_key = f"{addonfoldername}_winsize"
 user_files_folder = os.path.join(addon_path, "user_files")
 
 
