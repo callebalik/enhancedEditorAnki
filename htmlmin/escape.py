@@ -26,13 +26,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import re
-
-try:
-  from html import escape
-except ImportError:
-  from cgi import escape
-
-import re
+from html import escape
 
 NO_QUOTES = 0
 SINGLE_QUOTE = 1
